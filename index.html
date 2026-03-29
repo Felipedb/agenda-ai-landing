@@ -543,93 +543,292 @@ ul { list-style: none; }
 }
 
 /* ══════════════════════════════════════
-   DASHBOARD SECTION
+   DASHBOARD SECTION - MacBook + Calendar
    ══════════════════════════════════════ */
 .dashboard-section { padding: 72px 0; position: relative; }
-.dash-preview { perspective: 1200px; }
-.dash-frame {
-  background: #0D1117;
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 24px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.04);
-  transform: rotateX(2deg);
-  transition: transform .4s ease;
+.dash-preview { perspective: 1400px; }
+
+/* MacBook Frame */
+.macbook {
+  max-width: 1100px; margin: 0 auto;
+  transform: rotateX(3deg);
+  transition: transform .5s ease;
 }
-.dash-frame:hover { transform: rotateX(0deg); }
-.dash-topbar {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 12px 20px;
-  background: #161B22;
+.macbook:hover { transform: rotateX(0deg); }
+.macbook-screen {
+  background: #1a1a1a;
+  border-radius: 12px 12px 0 0;
+  padding: 8px 8px 0;
+  border: 2px solid #333;
+  border-bottom: none;
+}
+.macbook-browser {
+  background: #0D1117;
+  border-radius: 8px 8px 0 0;
+  overflow: hidden;
+}
+/* Browser chrome bar */
+.browser-bar {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 16px;
+  background: #1C2128;
   border-bottom: 1px solid rgba(255,255,255,0.06);
 }
-.dash-topbar-left { display: flex; align-items: center; gap: 24px; }
-.dash-logo { font-weight: 800; font-size: .95rem; color: var(--white); }
-.dash-logo em { font-style: normal; color: var(--orange); }
-.dash-nav-item {
-  font-size: .78rem; color: var(--gray-500); cursor: pointer;
-  padding: 4px 0; border-bottom: 2px solid transparent;
-  transition: color .2s, border-color .2s;
+.browser-dots { display: flex; gap: 6px; }
+.browser-dots span {
+  width: 12px; height: 12px; border-radius: 50%;
 }
-.dash-nav-item.active { color: var(--white); border-color: var(--orange); }
+.browser-dots span:nth-child(1) { background: #FF5F57; }
+.browser-dots span:nth-child(2) { background: #FEBC2E; }
+.browser-dots span:nth-child(3) { background: #28C840; }
+.browser-url {
+  flex: 1; display: flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 6px; padding: 6px 12px;
+  font-size: .72rem; color: var(--gray-400);
+}
+.browser-url svg { flex-shrink: 0; opacity: .5; }
+.browser-tabs { display: flex; gap: 2px; margin-left: 8px; }
+.browser-tab {
+  padding: 5px 14px; border-radius: 6px 6px 0 0;
+  font-size: .68rem; color: var(--gray-500);
+  background: rgba(255,255,255,0.03);
+}
+.browser-tab.active { background: #0D1117; color: var(--white); }
+
+/* Dashboard App */
+.dash-app { min-height: 520px; display: flex; flex-direction: column; }
+
+/* Dashboard Navbar */
+.dash-navbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.dash-nav-left { display: flex; align-items: center; gap: 16px; }
+.dash-logo-icon {
+  width: 28px; height: 28px; border-radius: 8px;
+  background: #25D366; display: flex; align-items: center; justify-content: center;
+}
+.dash-brand { font-weight: 800; font-size: .85rem; color: var(--white); }
+.dash-brand em { font-style: normal; color: var(--orange); }
+.dash-tab {
+  font-size: .78rem; color: var(--gray-500); font-weight: 500;
+  padding-bottom: 2px; border-bottom: 2px solid transparent;
+  cursor: pointer; transition: all .15s;
+}
+.dash-tab.active { color: var(--white); border-bottom-color: var(--orange); font-weight: 600; }
 .dash-avatar {
   width: 32px; height: 32px; border-radius: 50%;
   background: var(--orange); color: var(--white);
   display: flex; align-items: center; justify-content: center;
-  font-size: .7rem; font-weight: 700;
+  font-size: .7rem; font-weight: 800;
 }
-.dash-content { padding: 20px; }
-.dash-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+
+/* Dashboard Content */
+.dash-content { padding: 16px 20px; flex: 1; }
+
+/* Stats Cards */
+.dash-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 14px; }
 .dash-stat-card {
   background: rgba(255,255,255,0.03);
   border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 12px;
-  padding: 16px;
-  display: flex; flex-direction: column; gap: 4px;
+  border-radius: 10px; padding: 16px 18px;
 }
-.dash-stat-label { font-size: .7rem; color: var(--gray-500); text-transform: uppercase; letter-spacing: .04em; }
-.dash-stat-value { font-size: 1.6rem; font-weight: 800; color: var(--white); }
-.dash-stat-change { font-size: .72rem; color: var(--gray-400); }
-.dash-stat-change.positive { color: #10B981; }
-.dash-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 16px; }
-.dash-appointments, .dash-sidebar {
+.dash-stat-label {
+  font-size: .58rem; font-weight: 700; letter-spacing: .06em;
+  color: var(--gray-500); text-transform: uppercase; margin-bottom: 10px;
+}
+.dash-stat-value { font-size: 1.8rem; font-weight: 800; color: var(--white); margin-bottom: 4px; }
+.dash-stat-sub { font-size: .68rem; font-weight: 600; }
+.dash-stat-sub.orange { color: var(--orange); }
+.dash-stat-sub.green { color: #10B981; }
+.dash-stat-sub.muted { color: var(--gray-500); }
+
+/* Week View */
+.dash-week-view {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 10px; padding: 14px 18px; margin-bottom: 14px;
+}
+.dash-card-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 12px;
+}
+.dash-card-title { font-size: .82rem; font-weight: 700; color: var(--white); }
+.dash-link {
+  font-size: .65rem; font-weight: 700; color: var(--orange);
+  background: rgba(249,115,22,0.1); padding: 4px 10px; border-radius: 6px;
+  cursor: pointer;
+}
+.dash-week-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
+.dash-week-day {
   background: rgba(255,255,255,0.02);
   border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 12px; padding: 16px;
+  border-radius: 8px; padding: 10px 6px; text-align: center;
+  transition: all .2s;
 }
-.dash-appointments h4, .dash-sidebar h4 {
-  font-size: .82rem; font-weight: 700; margin-bottom: 12px; color: var(--gray-300);
+.dash-week-day.today {
+  background: rgba(249,115,22,0.1);
+  border-color: rgba(249,115,22,0.3);
 }
+.dash-week-name {
+  display: block; font-size: .6rem; font-weight: 600;
+  text-transform: uppercase; color: var(--gray-500); margin-bottom: 2px;
+}
+.dash-week-day.today .dash-week-name { color: var(--orange); }
+.dash-week-num {
+  display: block; font-size: 1rem; font-weight: 800; color: var(--gray-300);
+  margin-bottom: 6px;
+}
+.dash-week-day.today .dash-week-num { color: var(--white); }
+.dash-week-dots { display: flex; justify-content: center; gap: 3px; margin-bottom: 4px; min-height: 8px; }
+.dash-week-dots .dot-green { width: 6px; height: 6px; border-radius: 50%; background: #10B981; }
+.dash-week-dots .dot-orange { width: 6px; height: 6px; border-radius: 50%; background: var(--orange); }
+.dash-week-dots .dot-blue { width: 6px; height: 6px; border-radius: 50%; background: var(--blue); }
+.dash-week-count { font-size: .7rem; font-weight: 700; }
+.dash-week-count.green { color: #10B981; }
+.dash-week-count.muted { color: var(--gray-500); }
+
+/* Bottom grid: Today + Sophia */
+.dash-bottom { display: grid; grid-template-columns: 3fr 2fr; gap: 12px; }
+.dash-today, .dash-sophia {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 10px; padding: 14px 18px;
+}
+
+/* Appointment list */
+.dash-appt-list { display: flex; flex-direction: column; }
 .dash-appt {
   display: flex; align-items: center; gap: 12px;
   padding: 10px 0;
-  border-bottom: 1px solid rgba(255,255,255,0.04);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
 }
 .dash-appt:last-child { border-bottom: none; }
 .dash-appt-time {
-  font-size: .82rem; font-weight: 700; color: var(--orange);
-  min-width: 48px;
+  font-size: .88rem; font-weight: 800; color: var(--orange);
+  min-width: 48px; text-align: right;
 }
-.dash-appt-info { display: flex; flex-direction: column; flex: 1; }
-.dash-appt-name { font-size: .8rem; font-weight: 600; color: var(--white); }
-.dash-appt-service { font-size: .7rem; color: var(--gray-500); }
-.dash-appt-status {
-  font-size: .65rem; font-weight: 700; text-transform: uppercase;
-  padding: 3px 8px; border-radius: 20px; letter-spacing: .03em;
+.dash-appt-divider { width: 1px; height: 32px; background: rgba(255,255,255,0.08); }
+.dash-appt-info { flex: 1; }
+.dash-appt-info strong { display: block; font-size: .78rem; color: var(--white); font-weight: 700; }
+.dash-appt-info span { font-size: .65rem; color: var(--gray-500); }
+.dash-badge {
+  padding: 4px 10px; border-radius: 20px;
+  font-size: .58rem; font-weight: 800; letter-spacing: .02em;
 }
-.dash-appt-status.confirmed { background: rgba(16,185,129,0.15); color: #10B981; }
-.dash-appt-status.pending { background: rgba(249,115,22,0.15); color: #FB923C; }
-.dash-activity { display: flex; flex-direction: column; gap: 10px; }
-.dash-act-item {
-  display: flex; align-items: center; gap: 8px;
-  font-size: .75rem; color: var(--gray-400);
+.dash-badge.confirmed { background: rgba(16,185,129,0.15); color: #10B981; }
+.dash-badge.pending { background: rgba(249,115,22,0.15); color: var(--orange); }
+
+/* Sophia activity */
+.dash-sophia-list { display: flex; flex-direction: column; }
+.dash-sophia-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
 }
-.dash-act-dot {
+.dash-sophia-item:last-child { border-bottom: none; }
+.s-dot {
   width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
 }
-.dash-act-dot.green { background: #10B981; }
-.dash-act-dot.orange { background: #FB923C; }
-.dash-act-time { margin-left: auto; font-size: .68rem; color: var(--gray-500); white-space: nowrap; }
+.s-dot.green { background: #25D366; }
+.s-dot.orange { background: var(--orange); }
+.s-dot.blue { background: var(--blue); }
+.s-text { flex: 1; font-size: .75rem; color: var(--gray-300); }
+.s-time { font-size: .65rem; color: var(--gray-500); white-space: nowrap; }
+
+/* Week day clickable + selected */
+.dash-week-day { cursor: pointer; }
+.dash-week-day.selected {
+  background: rgba(249,115,22,0.15);
+  border-color: rgba(249,115,22,0.4);
+}
+.dash-week-day.selected .dash-week-name { color: var(--orange); }
+.dash-week-day.selected .dash-week-num { color: var(--white); }
+
+/* Agenda View (hidden by default) */
+.dash-agenda-view { display: none; }
+.dash-agenda-view.active { display: block; }
+.dash-dashboard-view.hidden { display: none; }
+
+/* Google Calendar style grid */
+.gcal { border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; overflow: hidden; }
+.gcal-header {
+  display: grid; grid-template-columns: 52px repeat(7, 1fr);
+  background: rgba(255,255,255,0.03);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.gcal-corner { padding: 10px 6px; }
+.gcal-day-head {
+  text-align: center; padding: 8px 4px;
+  font-size: .6rem; font-weight: 700; text-transform: uppercase;
+  color: var(--gray-500); letter-spacing: .04em;
+  border-left: 1px solid rgba(255,255,255,0.04);
+}
+.gcal-day-head .gnum {
+  display: block; font-size: .8rem; font-weight: 800; color: var(--gray-300); margin-top: 1px;
+}
+.gcal-day-head.today { color: var(--orange); }
+.gcal-day-head.today .gnum {
+  color: var(--white); background: var(--orange); border-radius: 50%;
+  width: 24px; height: 24px; line-height: 24px; margin: 2px auto 0; font-size: .72rem;
+}
+.gcal-body { max-height: 340px; overflow-y: auto; }
+.gcal-row {
+  display: grid; grid-template-columns: 52px repeat(7, 1fr);
+  min-height: 48px;
+}
+.gcal-time {
+  padding: 2px 6px 0; font-size: .58rem; color: var(--gray-500);
+  text-align: right; border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+.gcal-slot {
+  border-left: 1px solid rgba(255,255,255,0.04);
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+  position: relative; padding: 2px;
+  min-height: 48px;
+}
+.gcal-evt {
+  border-radius: 4px; padding: 3px 6px;
+  font-size: .58rem; font-weight: 600; line-height: 1.3;
+  border-left: 3px solid; margin-bottom: 1px;
+}
+.gcal-evt.green { background: rgba(16,185,129,0.15); color: #34D399; border-color: #10B981; }
+.gcal-evt.orange { background: rgba(249,115,22,0.15); color: #FB923C; border-color: #F97316; }
+.gcal-evt.blue { background: rgba(59,130,246,0.15); color: #60A5FA; border-color: #3B82F6; }
+.gcal-evt.purple { background: rgba(139,92,246,0.15); color: #A78BFA; border-color: #8B5CF6; }
+.gcal-evt span { display: block; font-weight: 400; opacity: .7; font-size: .52rem; }
+
+/* Responsive dashboard */
+@media (max-width: 768px) {
+  .dash-stats { grid-template-columns: repeat(2, 1fr); }
+  .dash-week-grid { grid-template-columns: repeat(4, 1fr); }
+  .dash-bottom { grid-template-columns: 1fr; }
+  .gcal-header, .gcal-row { grid-template-columns: 40px repeat(7, 1fr); }
+  .gcal-evt { font-size: .5rem; padding: 2px 3px; }
+}
+
+/* MacBook base/hinge */
+.macbook-base {
+  width: 108%; margin-left: -4%;
+  height: 14px;
+  background: linear-gradient(to bottom, #444, #2a2a2a, #333);
+  border-radius: 0 0 8px 8px;
+  position: relative;
+}
+.macbook-base::before {
+  content: ''; position: absolute;
+  top: 0; left: 50%; transform: translateX(-50%);
+  width: 18%; height: 4px;
+  background: #555; border-radius: 0 0 4px 4px;
+}
+.macbook-bottom {
+  width: 114%; margin-left: -7%;
+  height: 6px;
+  background: linear-gradient(to bottom, #2a2a2a, #1a1a1a);
+  border-radius: 0 0 12px 12px;
+}
 
 /* ══════════════════════════════════════
    FEATURES
@@ -1121,111 +1320,290 @@ ul { list-style: none; }
     <div class="section-head reveal">
       <div class="section-tag">Seu Painel</div>
       <h2>Controle total dos seus<br>agendamentos em tempo real</h2>
-      <p>Acompanhe tudo pelo painel: agendamentos do dia, horários livres, lembretes e o desempenho da Sophia.</p>
+      <p>Acompanhe tudo pelo painel: agendamentos do dia, horários livres,<br>lembretes e o desempenho da Sophia.</p>
     </div>
     <div class="dash-preview reveal">
-      <div class="dash-frame">
-        <!-- Top bar -->
-        <div class="dash-topbar">
-          <div class="dash-topbar-left">
-            <span class="dash-logo">Agenda<em>AI</em></span>
-            <span class="dash-nav-item active">Dashboard</span>
-            <span class="dash-nav-item">Agenda</span>
-            <span class="dash-nav-item">Serviços</span>
-          </div>
-          <div class="dash-topbar-right">
-            <span class="dash-avatar">FO</span>
+      <div class="macbook">
+        <div class="macbook-screen">
+          <div class="macbook-browser">
+            <!-- Browser chrome -->
+            <div class="browser-bar">
+              <div class="browser-dots"><span></span><span></span><span></span></div>
+              <div class="browser-url">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke="#28C840" stroke-width="2" stroke-linecap="round"/></svg>
+                app.agendaiassistente.com/dashboard
+              </div>
+              <div class="browser-tabs">
+                <span class="browser-tab active">Agenda AI</span>
+              </div>
+            </div>
+            <!-- Dashboard App -->
+            <div class="dash-app">
+              <!-- Top Navbar -->
+              <div class="dash-navbar">
+                <div class="dash-nav-left">
+                  <div class="dash-logo-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg></div>
+                  <span class="dash-brand">Agenda<em>AI</em></span>
+                  <span class="dash-tab active">Dashboard</span>
+                  <span class="dash-tab">Agenda</span>
+                  <span class="dash-tab">Serviços</span>
+                  <span class="dash-tab">WhatsApp</span>
+                  <span class="dash-tab">Config.</span>
+                </div>
+                <div class="dash-avatar">FO</div>
+              </div>
+              <!-- Content -->
+              <div class="dash-content">
+                <!-- === DASHBOARD VIEW === -->
+                <div class="dash-dashboard-view" id="dashDashView">
+                <!-- Stats Cards -->
+                <div class="dash-stats">
+                  <div class="dash-stat-card">
+                    <div class="dash-stat-label">AGENDAMENTOS HOJE</div>
+                    <div class="dash-stat-value">18</div>
+                    <div class="dash-stat-sub orange">+5 vs ontem</div>
+                  </div>
+                  <div class="dash-stat-card">
+                    <div class="dash-stat-label">TAXA DE CONFIRMAÇÃO</div>
+                    <div class="dash-stat-value">97%</div>
+                    <div class="dash-stat-sub green">+4% este mês</div>
+                  </div>
+                  <div class="dash-stat-card">
+                    <div class="dash-stat-label">MENSAGENS RESPONDIDAS</div>
+                    <div class="dash-stat-value">124</div>
+                    <div class="dash-stat-sub green">Sophia: 100%</div>
+                  </div>
+                  <div class="dash-stat-card">
+                    <div class="dash-stat-label">FATURAMENTO SEMANAL</div>
+                    <div class="dash-stat-value">R$ 4.850</div>
+                    <div class="dash-stat-sub orange">+22% vs semana anterior</div>
+                  </div>
+                </div>
+                <!-- Visão da Semana -->
+                <div class="dash-week-view">
+                  <div class="dash-card-header">
+                    <span class="dash-card-title">Visão da Semana</span>
+                    <span class="dash-link">Ver Agenda Completa →</span>
+                  </div>
+                  <div class="dash-week-grid" id="dashWeekGrid">
+                    <div class="dash-week-day" data-day="seg">
+                      <span class="dash-week-name">Seg</span><span class="dash-week-num">23</span>
+                      <div class="dash-week-dots"><span class="dot-green"></span><span class="dot-green"></span><span class="dot-orange"></span></div>
+                      <span class="dash-week-count green">6</span>
+                    </div>
+                    <div class="dash-week-day" data-day="ter">
+                      <span class="dash-week-name">Ter</span><span class="dash-week-num">24</span>
+                      <div class="dash-week-dots"><span class="dot-green"></span><span class="dot-green"></span><span class="dot-green"></span></div>
+                      <span class="dash-week-count green">9</span>
+                    </div>
+                    <div class="dash-week-day" data-day="qua">
+                      <span class="dash-week-name">Qua</span><span class="dash-week-num">25</span>
+                      <div class="dash-week-dots"><span class="dot-green"></span><span class="dot-green"></span><span class="dot-green"></span><span class="dot-blue"></span></div>
+                      <span class="dash-week-count green">12</span>
+                    </div>
+                    <div class="dash-week-day" data-day="qui">
+                      <span class="dash-week-name">Qui</span><span class="dash-week-num">26</span>
+                      <div class="dash-week-dots"><span class="dot-green"></span><span class="dot-green"></span><span class="dot-green"></span><span class="dot-orange"></span></div>
+                      <span class="dash-week-count green">15</span>
+                    </div>
+                    <div class="dash-week-day today" data-day="sex">
+                      <span class="dash-week-name">Sex</span><span class="dash-week-num">27</span>
+                      <div class="dash-week-dots"><span class="dot-green"></span><span class="dot-green"></span><span class="dot-green"></span><span class="dot-green"></span><span class="dot-orange"></span></div>
+                      <span class="dash-week-count green">18</span>
+                    </div>
+                    <div class="dash-week-day" data-day="sab">
+                      <span class="dash-week-name">Sáb</span><span class="dash-week-num">28</span>
+                      <div class="dash-week-dots"><span class="dot-green"></span><span class="dot-green"></span><span class="dot-blue"></span></div>
+                      <span class="dash-week-count green">8</span>
+                    </div>
+                    <div class="dash-week-day" data-day="dom">
+                      <span class="dash-week-name">Dom</span><span class="dash-week-num">29</span>
+                      <div class="dash-week-dots"></div>
+                      <span class="dash-week-count muted">0</span>
+                    </div>
+                  </div>
+                </div>
+                <!-- Bottom: Today + Sophia -->
+                <div class="dash-bottom">
+                  <!-- Agendamentos de Hoje -->
+                  <div class="dash-today">
+                    <div class="dash-card-header">
+                      <span class="dash-card-title">Agendamentos de Hoje</span>
+                    </div>
+                    <div class="dash-appt-list">
+                      <div class="dash-appt">
+                        <span class="dash-appt-time">08:30</span>
+                        <div class="dash-appt-divider"></div>
+                        <div class="dash-appt-info"><strong>Maria Silva</strong><span>Corte + Escova</span></div>
+                        <span class="dash-badge confirmed">CONFIRMADO</span>
+                      </div>
+                      <div class="dash-appt">
+                        <span class="dash-appt-time">09:15</span>
+                        <div class="dash-appt-divider"></div>
+                        <div class="dash-appt-info"><strong>Fernanda Alves</strong><span>Escova Progressiva</span></div>
+                        <span class="dash-badge confirmed">CONFIRMADO</span>
+                      </div>
+                      <div class="dash-appt">
+                        <span class="dash-appt-time">10:30</span>
+                        <div class="dash-appt-divider"></div>
+                        <div class="dash-appt-info"><strong>Ana Oliveira</strong><span>Coloração Completa</span></div>
+                        <span class="dash-badge confirmed">CONFIRMADO</span>
+                      </div>
+                      <div class="dash-appt">
+                        <span class="dash-appt-time">13:00</span>
+                        <div class="dash-appt-divider"></div>
+                        <div class="dash-appt-info"><strong>João Santos</strong><span>Corte Masculino</span></div>
+                        <span class="dash-badge pending">PENDENTE</span>
+                      </div>
+                      <div class="dash-appt">
+                        <span class="dash-appt-time">14:30</span>
+                        <div class="dash-appt-divider"></div>
+                        <div class="dash-appt-info"><strong>Carla Mendes</strong><span>Manicure + Pedicure</span></div>
+                        <span class="dash-badge confirmed">CONFIRMADO</span>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Atividade da Sophia -->
+                  <div class="dash-sophia">
+                    <div class="dash-card-header">
+                      <span class="dash-card-title">Atividade da Sophia</span>
+                    </div>
+                    <div class="dash-sophia-list">
+                      <div class="dash-sophia-item"><span class="s-dot green"></span><span class="s-text">Agendou Maria Silva - 08:30</span><span class="s-time">há 3h</span></div>
+                      <div class="dash-sophia-item"><span class="s-dot green"></span><span class="s-text">Confirmação recebida de Fernanda</span><span class="s-time">há 2h</span></div>
+                      <div class="dash-sophia-item"><span class="s-dot green"></span><span class="s-text">Lembrete enviado para Ana Oliveira</span><span class="s-time">há 1h</span></div>
+                      <div class="dash-sophia-item"><span class="s-dot orange"></span><span class="s-text">Aguardando confirmação de João</span><span class="s-time">há 30min</span></div>
+                      <div class="dash-sophia-item"><span class="s-dot green"></span><span class="s-text">Agendou Carla Mendes - 14:30</span><span class="s-time">há 15min</span></div>
+                      <div class="dash-sophia-item"><span class="s-dot blue"></span><span class="s-text">Reagendou Patricia N. para sábado</span><span class="s-time">há 5min</span></div>
+                    </div>
+                  </div>
+                </div>
+                </div><!-- /dash-dashboard-view -->
+
+                <!-- === AGENDA VIEW (Google Calendar style) === -->
+                <div class="dash-agenda-view" id="dashAgendaView">
+                  <div class="gcal">
+                    <div class="gcal-header">
+                      <div class="gcal-corner"></div>
+                      <div class="gcal-day-head">SEG<span class="gnum">23</span></div>
+                      <div class="gcal-day-head">TER<span class="gnum">24</span></div>
+                      <div class="gcal-day-head">QUA<span class="gnum">25</span></div>
+                      <div class="gcal-day-head">QUI<span class="gnum">26</span></div>
+                      <div class="gcal-day-head today">SEX<span class="gnum">27</span></div>
+                      <div class="gcal-day-head">SAB<span class="gnum">28</span></div>
+                      <div class="gcal-day-head">DOM<span class="gnum">29</span></div>
+                    </div>
+                    <div class="gcal-body">
+                      <!-- 08:00 -->
+                      <div class="gcal-row">
+                        <div class="gcal-time">08:00</div>
+                        <div class="gcal-slot"><div class="gcal-evt green">Maria S.<span>Corte</span></div></div>
+                        <div class="gcal-slot"></div>
+                        <div class="gcal-slot"><div class="gcal-evt blue">Lucia R.<span>Hidratação</span></div></div>
+                        <div class="gcal-slot"><div class="gcal-evt green">Camila D.<span>Escova</span></div></div>
+                        <div class="gcal-slot"><div class="gcal-evt green">Paula M.<span>Corte</span></div></div>
+                        <div class="gcal-slot"><div class="gcal-evt purple">Bruna L.<span>Coloração</span></div></div>
+                        <div class="gcal-slot"></div>
+                      </div>
+                      <!-- 09:00 -->
+                      <div class="gcal-row">
+                        <div class="gcal-time">09:00</div>
+                        <div class="gcal-slot"><div class="gcal-evt blue">Fernanda A.<span>Progressiva</span></div></div>
+                        <div class="gcal-slot"><div class="gcal-evt orange">Ana O.<span>Manicure</span></div></div>
+                        <div class="gcal-slot"><div class="gcal-evt green">Roberto A.<span>Barba</span></div></div>
+                        <div class="gcal-slot"><div class="gcal-evt green">Carla M.<span>Escova</span></div></div>
+                        <div class="gcal-slot"><div class="gcal-evt blue">Renata F.<span>Coloração</span></div></div>
+                        <div class="gcal-slot"><div class="gcal-evt green">Thais B.<span>Corte</span></div></div>
+                        <div class="gcal-slot"></div>
+                      </div>
+                      <!-- 10:00 -->
+                      <div class="gcal-row">
+                        <div class="gcal-time">10:00</div>
+                        <div class="gcal-slot"><div class="gcal-evt green">Patricia V.<span>Corte</span></div></div>
+                        <div class="gcal-slot"><div class="gcal-evt green">João S.<span>Corte Masc.</span></div></div>
+                        <div class="gcal-slot"><div class="gcal-evt orange">Diana P.<span>Mani+Pedi</span></div></div>
+                        <div class="gcal-slot"><div class="gcal-evt purple">Juliana T.<span>Mechas</span></div></div>
+                        <div class="gcal-slot"><div class="gcal-evt green">Sandra K.<span>Escova</span></div></div>
+                        <div class="gcal-slot"><div class="gcal-evt orange">Leticia F.<span>Pedicure</span></div></div>
+                        <div class="gcal-slot"></div>
+                      </div>
+                      <!-- 11:00 -->
+                      <div class="gcal-row">
+                        <div class="gcal-time">11:00</div>
+                        <div class="gcal-slot"></div>
+                        <div class="gcal-slot"><div class="gcal-evt blue">Claudia N.<span>Hidratação</span></div></div>
+                        <div class="gcal-slot"><div class="gcal-evt green">Pedro L.<span>Corte Masc.</span></div></div>
+                        <div class="gcal-slot"><div class="gcal-evt green">Amanda R.<span>Escova</span></div></div>
+                        <div class="gcal-slot"><div class="gcal-evt orange">Rita C.<span>Manicure</span></div></div>
+                        <div class="gcal-slot"></div>
+                        <div class="gcal-slot"></div>
+                      </div>
+                      <!-- 12:00 -->
+                      <div class="gcal-row">
+                        <div class="gcal-time">12:00</div>
+                        <div class="gcal-slot"></div>
+                        <div class="gcal-slot"></div>
+                        <div class="gcal-slot"></div>
+                        <div class="gcal-slot"></div>
+                        <div class="gcal-slot"></div>
+                        <div class="gcal-slot"></div>
+                        <div class="gcal-slot"></div>
+                      </div>
+                      <!-- 13:00 -->
+                      <div class="gcal-row">
+                        <div class="gcal-time">13:00</div>
+                        <div class="gcal-slot"><div class="gcal-evt green">Larissa N.<span>Corte</span></div></div>
+                        <div class="gcal-slot"><div class="gcal-evt purple">Amanda R.<span>Coloração</span></div></div>
+                        <div class="gcal-slot"><div class="gcal-evt green">Marcos L.<span>Corte Masc.</span></div></div>
+                        <div class="gcal-slot"><div class="gcal-evt blue">Beatriz S.<span>Hidratação</span></div></div>
+                        <div class="gcal-slot"><div class="gcal-evt green">Carla M.<span>Mani+Pedi</span></div></div>
+                        <div class="gcal-slot"><div class="gcal-evt green">Isabela G.<span>Corte</span></div></div>
+                        <div class="gcal-slot"></div>
+                      </div>
+                      <!-- 14:00 -->
+                      <div class="gcal-row">
+                        <div class="gcal-time">14:00</div>
+                        <div class="gcal-slot"><div class="gcal-evt orange">Vivian T.<span>Pedicure</span></div></div>
+                        <div class="gcal-slot"><div class="gcal-evt green">Natalia B.<span>Escova</span></div></div>
+                        <div class="gcal-slot"><div class="gcal-evt green">Gabriela M.<span>Corte</span></div></div>
+                        <div class="gcal-slot"><div class="gcal-evt green">Carol F.<span>Escova</span></div></div>
+                        <div class="gcal-slot"><div class="gcal-evt purple">Fernanda C.<span>Mechas</span></div></div>
+                        <div class="gcal-slot"></div>
+                        <div class="gcal-slot"></div>
+                      </div>
+                      <!-- 15:00 -->
+                      <div class="gcal-row">
+                        <div class="gcal-time">15:00</div>
+                        <div class="gcal-slot"></div>
+                        <div class="gcal-slot"><div class="gcal-evt green">Michele V.<span>Corte</span></div></div>
+                        <div class="gcal-slot"><div class="gcal-evt blue">Aline S.<span>Progressiva</span></div></div>
+                        <div class="gcal-slot"><div class="gcal-evt orange">Raquel O.<span>Manicure</span></div></div>
+                        <div class="gcal-slot"><div class="gcal-evt green">Tatiane R.<span>Corte</span></div></div>
+                        <div class="gcal-slot"></div>
+                        <div class="gcal-slot"></div>
+                      </div>
+                      <!-- 16:00 -->
+                      <div class="gcal-row">
+                        <div class="gcal-time">16:00</div>
+                        <div class="gcal-slot"><div class="gcal-evt green">Simone P.<span>Escova</span></div></div>
+                        <div class="gcal-slot"><div class="gcal-evt orange">Vanessa L.<span>Pedicure</span></div></div>
+                        <div class="gcal-slot"><div class="gcal-evt green">Helena C.<span>Corte</span></div></div>
+                        <div class="gcal-slot"><div class="gcal-evt green">Priscila M.<span>Escova</span></div></div>
+                        <div class="gcal-slot"><div class="gcal-evt green">Daniela A.<span>Corte</span></div></div>
+                        <div class="gcal-slot"><div class="gcal-evt green">Mariana S.<span>Escova</span></div></div>
+                        <div class="gcal-slot"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div><!-- /dash-agenda-view -->
+
+              </div>
+            </div>
           </div>
         </div>
-        <!-- Content -->
-        <div class="dash-content">
-          <!-- Stats row -->
-          <div class="dash-stats">
-            <div class="dash-stat-card">
-              <span class="dash-stat-label">Agendamentos Hoje</span>
-              <span class="dash-stat-value">12</span>
-              <span class="dash-stat-change positive">+3 vs ontem</span>
-            </div>
-            <div class="dash-stat-card">
-              <span class="dash-stat-label">Taxa de Confirmação</span>
-              <span class="dash-stat-value">94%</span>
-              <span class="dash-stat-change positive">+2%</span>
-            </div>
-            <div class="dash-stat-card">
-              <span class="dash-stat-label">Mensagens Respondidas</span>
-              <span class="dash-stat-value">47</span>
-              <span class="dash-stat-change positive">Sophia: 100%</span>
-            </div>
-            <div class="dash-stat-card">
-              <span class="dash-stat-label">Próximo Horário Livre</span>
-              <span class="dash-stat-value">15:30</span>
-              <span class="dash-stat-change">Hoje</span>
-            </div>
-          </div>
-          <!-- Appointments -->
-          <div class="dash-grid">
-            <div class="dash-appointments">
-              <h4>Agendamentos de Hoje</h4>
-              <div class="dash-appt">
-                <div class="dash-appt-time">09:00</div>
-                <div class="dash-appt-info">
-                  <span class="dash-appt-name">Maria Silva</span>
-                  <span class="dash-appt-service">Corte + Escova</span>
-                </div>
-                <span class="dash-appt-status confirmed">Confirmado</span>
-              </div>
-              <div class="dash-appt">
-                <div class="dash-appt-time">10:30</div>
-                <div class="dash-appt-info">
-                  <span class="dash-appt-name">Ana Oliveira</span>
-                  <span class="dash-appt-service">Coloração</span>
-                </div>
-                <span class="dash-appt-status confirmed">Confirmado</span>
-              </div>
-              <div class="dash-appt">
-                <div class="dash-appt-time">13:00</div>
-                <div class="dash-appt-info">
-                  <span class="dash-appt-name">João Santos</span>
-                  <span class="dash-appt-service">Corte Masculino</span>
-                </div>
-                <span class="dash-appt-status pending">Pendente</span>
-              </div>
-              <div class="dash-appt">
-                <div class="dash-appt-time">14:30</div>
-                <div class="dash-appt-info">
-                  <span class="dash-appt-name">Carla Mendes</span>
-                  <span class="dash-appt-service">Manicure + Pedicure</span>
-                </div>
-                <span class="dash-appt-status confirmed">Confirmado</span>
-              </div>
-            </div>
-            <div class="dash-sidebar">
-              <h4>Atividade da Sophia</h4>
-              <div class="dash-activity">
-                <div class="dash-act-item">
-                  <span class="dash-act-dot green"></span>
-                  <span>Agendou Maria Silva - 09:00</span>
-                  <span class="dash-act-time">há 2h</span>
-                </div>
-                <div class="dash-act-item">
-                  <span class="dash-act-dot green"></span>
-                  <span>Lembrete enviado para Ana</span>
-                  <span class="dash-act-time">há 1h</span>
-                </div>
-                <div class="dash-act-item">
-                  <span class="dash-act-dot orange"></span>
-                  <span>Aguardando confirmação de João</span>
-                  <span class="dash-act-time">há 30min</span>
-                </div>
-                <div class="dash-act-item">
-                  <span class="dash-act-dot green"></span>
-                  <span>Agendou Carla Mendes - 14:30</span>
-                  <span class="dash-act-time">há 15min</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <!-- MacBook base -->
+        <div class="macbook-base"></div>
+        <div class="macbook-bottom"></div>
       </div>
     </div>
   </div>
@@ -1668,6 +2046,147 @@ document.querySelectorAll('a[href^="#"]').forEach(a =>
     });
   }, { threshold: 0.3 });
   chatObs.observe(chat);
+})();
+
+// ========== DASHBOARD INTERACTION ==========
+(function() {
+  const tabs = document.querySelectorAll('.dash-tab');
+  const dashView = document.getElementById('dashDashView');
+  const agendaView = document.getElementById('dashAgendaView');
+  if (!dashView || !agendaView) return;
+
+  // Tab switching: Dashboard vs Agenda
+  tabs.forEach(tab => {
+    tab.addEventListener('click', function() {
+      tabs.forEach(t => t.classList.remove('active'));
+      this.classList.add('active');
+      const label = this.textContent.trim();
+      if (label === 'Agenda') {
+        dashView.classList.add('hidden');
+        agendaView.classList.add('active');
+      } else {
+        dashView.classList.remove('hidden');
+        agendaView.classList.remove('active');
+      }
+    });
+  });
+
+  // Week day click: show appointments for that day
+  const dayData = {
+    seg: [
+      {t:'08:30',n:'Maria Silva',s:'Corte + Escova',st:'confirmed'},
+      {t:'09:15',n:'Fernanda Alves',s:'Escova Progressiva',st:'confirmed'},
+      {t:'10:00',n:'Patricia Vieira',s:'Corte Feminino',st:'confirmed'},
+      {t:'13:00',n:'Larissa Nunes',s:'Corte Feminino',st:'confirmed'},
+      {t:'14:30',n:'Vivian Torres',s:'Pedicure',st:'confirmed'},
+      {t:'16:00',n:'Simone Pereira',s:'Escova',st:'confirmed'}
+    ],
+    ter: [
+      {t:'09:00',n:'Ana Oliveira',s:'Manicure',st:'confirmed'},
+      {t:'10:00',n:'João Santos',s:'Corte Masculino',st:'confirmed'},
+      {t:'11:00',n:'Claudia Neves',s:'Hidratação',st:'confirmed'},
+      {t:'13:00',n:'Amanda Reis',s:'Coloração Completa',st:'confirmed'},
+      {t:'14:00',n:'Natalia Borges',s:'Escova',st:'confirmed'},
+      {t:'15:00',n:'Michele Viana',s:'Corte Feminino',st:'confirmed'},
+      {t:'16:00',n:'Vanessa Lima',s:'Pedicure',st:'confirmed'},
+      {t:'09:30',n:'Ricardo M.',s:'Corte Masculino',st:'confirmed'},
+      {t:'11:30',n:'Leticia S.',s:'Manicure',st:'confirmed'}
+    ],
+    qua: [
+      {t:'08:00',n:'Lucia Ribeiro',s:'Hidratação',st:'confirmed'},
+      {t:'09:00',n:'Roberto Alves',s:'Barba',st:'confirmed'},
+      {t:'10:00',n:'Diana Prado',s:'Manicure + Pedicure',st:'confirmed'},
+      {t:'11:00',n:'Pedro Lima',s:'Corte Masculino',st:'confirmed'},
+      {t:'13:00',n:'Marcos Lopes',s:'Corte Masculino',st:'confirmed'},
+      {t:'14:00',n:'Gabriela Martins',s:'Corte Feminino',st:'confirmed'},
+      {t:'15:00',n:'Aline Souza',s:'Progressiva',st:'confirmed'},
+      {t:'16:00',n:'Helena Costa',s:'Corte Feminino',st:'confirmed'},
+      {t:'08:30',n:'Tatiane R.',s:'Escova',st:'confirmed'},
+      {t:'10:30',n:'Camila S.',s:'Pedicure',st:'confirmed'},
+      {t:'14:30',n:'Priscila M.',s:'Escova',st:'confirmed'},
+      {t:'15:30',n:'Daniela A.',s:'Corte',st:'confirmed'}
+    ],
+    qui: [
+      {t:'08:00',n:'Camila Dias',s:'Escova',st:'confirmed'},
+      {t:'09:00',n:'Carla Mendes',s:'Escova',st:'confirmed'},
+      {t:'10:00',n:'Juliana Torres',s:'Mechas',st:'confirmed'},
+      {t:'11:00',n:'Amanda Reis',s:'Escova',st:'confirmed'},
+      {t:'13:00',n:'Beatriz Silva',s:'Hidratação',st:'confirmed'},
+      {t:'14:00',n:'Carol Ferreira',s:'Escova',st:'confirmed'},
+      {t:'15:00',n:'Raquel Oliveira',s:'Manicure',st:'confirmed'},
+      {t:'16:00',n:'Priscila Moraes',s:'Escova',st:'confirmed'},
+      {t:'08:30',n:'Thiago P.',s:'Corte Masculino',st:'confirmed'},
+      {t:'09:30',n:'Renata B.',s:'Corte',st:'confirmed'},
+      {t:'10:30',n:'Marcia L.',s:'Pedicure',st:'confirmed'},
+      {t:'11:30',n:'Fabiana G.',s:'Escova',st:'confirmed'},
+      {t:'13:30',n:'Luciana D.',s:'Corte',st:'confirmed'},
+      {t:'14:30',n:'Eduardo S.',s:'Corte Masc.',st:'confirmed'},
+      {t:'15:30',n:'Cristina N.',s:'Manicure',st:'pending'}
+    ],
+    sex: [
+      {t:'08:30',n:'Maria Silva',s:'Corte + Escova',st:'confirmed'},
+      {t:'09:15',n:'Fernanda Alves',s:'Escova Progressiva',st:'confirmed'},
+      {t:'09:30',n:'Renata Faria',s:'Coloração',st:'confirmed'},
+      {t:'10:00',n:'Sandra Klein',s:'Escova',st:'confirmed'},
+      {t:'10:30',n:'Ana Oliveira',s:'Coloração Completa',st:'confirmed'},
+      {t:'11:00',n:'Rita Castro',s:'Manicure',st:'confirmed'},
+      {t:'13:00',n:'João Santos',s:'Corte Masculino',st:'pending'},
+      {t:'13:30',n:'Carla Mendes',s:'Mani + Pedi',st:'confirmed'},
+      {t:'14:00',n:'Fernanda Cruz',s:'Mechas',st:'confirmed'},
+      {t:'14:30',n:'Tatiane Ramos',s:'Corte',st:'confirmed'},
+      {t:'15:00',n:'Daniela Alves',s:'Corte',st:'confirmed'},
+      {t:'15:30',n:'Beatriz S.',s:'Hidratação',st:'confirmed'},
+      {t:'16:00',n:'Isabela G.',s:'Corte',st:'confirmed'},
+      {t:'16:30',n:'Luciana M.',s:'Escova',st:'confirmed'},
+      {t:'08:00',n:'Paula Martins',s:'Corte',st:'confirmed'},
+      {t:'09:00',n:'Gabriela A.',s:'Manicure',st:'confirmed'},
+      {t:'11:30',n:'Mariana L.',s:'Pedicure',st:'confirmed'},
+      {t:'17:00',n:'Vanessa T.',s:'Escova',st:'confirmed'}
+    ],
+    sab: [
+      {t:'08:00',n:'Bruna Leite',s:'Coloração',st:'confirmed'},
+      {t:'09:00',n:'Thais Borges',s:'Corte',st:'confirmed'},
+      {t:'10:00',n:'Leticia Ferreira',s:'Pedicure',st:'confirmed'},
+      {t:'11:00',n:'Patricia Nascimento',s:'Escova',st:'confirmed'},
+      {t:'13:00',n:'Isabela Gomes',s:'Corte',st:'confirmed'},
+      {t:'14:00',n:'Mariana Santos',s:'Escova',st:'confirmed'},
+      {t:'09:30',n:'Rafael M.',s:'Corte Masc.',st:'confirmed'},
+      {t:'10:30',n:'Claudia R.',s:'Manicure',st:'pending'}
+    ],
+    dom: []
+  };
+
+  const weekDays = document.querySelectorAll('.dash-week-day[data-day]');
+  const todayList = document.querySelector('.dash-today');
+  const apptList = todayList ? todayList.querySelector('.dash-appt-list') : null;
+  const todayTitle = todayList ? todayList.querySelector('.dash-card-title') : null;
+
+  weekDays.forEach(day => {
+    day.addEventListener('click', function() {
+      weekDays.forEach(d => d.classList.remove('selected'));
+      this.classList.add('selected');
+      const key = this.dataset.day;
+      const dayName = this.querySelector('.dash-week-name').textContent;
+      const dayNum = this.querySelector('.dash-week-num').textContent;
+      const appts = dayData[key] || [];
+
+      if (todayTitle) todayTitle.textContent = 'Agendamentos - ' + dayName + ' ' + dayNum;
+      if (!apptList) return;
+
+      if (appts.length === 0) {
+        apptList.innerHTML = '<div style="padding:20px;text-align:center;color:var(--gray-500);font-size:.78rem;">Nenhum agendamento</div>';
+        return;
+      }
+      apptList.innerHTML = appts.slice(0, 6).map(a =>
+        '<div class="dash-appt">' +
+          '<span class="dash-appt-time">' + a.t + '</span>' +
+          '<div class="dash-appt-divider"></div>' +
+          '<div class="dash-appt-info"><strong>' + a.n + '</strong><span>' + a.s + '</span></div>' +
+          '<span class="dash-badge ' + a.st + '">' + (a.st === 'confirmed' ? 'CONFIRMADO' : 'PENDENTE') + '</span>' +
+        '</div>'
+      ).join('');
+    });
+  });
 })();
 
 </script>
