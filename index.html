@@ -546,25 +546,24 @@ ul { list-style: none; }
    DASHBOARD SECTION - MacBook + Calendar
    ══════════════════════════════════════ */
 .dashboard-section { padding: 72px 0; position: relative; }
-.dash-preview { perspective: 1400px; }
+.dash-preview { perspective: 1200px; }
 
-/* MacBook Frame */
+/* Browser Frame */
 .macbook {
-  max-width: 1100px; margin: 0 auto;
-  transform: rotateX(3deg);
-  transition: transform .5s ease;
+  max-width: 960px; margin: 0 auto;
+  transform: rotateX(2deg);
+  transition: transform .4s ease;
 }
 .macbook:hover { transform: rotateX(0deg); }
 .macbook-screen {
-  background: #1a1a1a;
-  border-radius: 12px 12px 0 0;
-  padding: 8px 8px 0;
-  border: 2px solid #333;
-  border-bottom: none;
+  background: #0D1117;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
 }
 .macbook-browser {
   background: #0D1117;
-  border-radius: 8px 8px 0 0;
   overflow: hidden;
 }
 /* Browser chrome bar */
@@ -618,6 +617,7 @@ ul { list-style: none; }
   cursor: pointer; transition: all .15s;
 }
 .dash-tab.active { color: var(--white); border-bottom-color: var(--orange); font-weight: 600; }
+.dash-tab.disabled { opacity: .35; cursor: default; }
 .dash-avatar {
   width: 32px; height: 32px; border-radius: 50%;
   background: var(--orange); color: var(--white);
@@ -687,7 +687,7 @@ ul { list-style: none; }
 .dash-week-dots .dot-orange { width: 6px; height: 6px; border-radius: 50%; background: var(--orange); }
 .dash-week-dots .dot-blue { width: 6px; height: 6px; border-radius: 50%; background: var(--blue); }
 .dash-week-count { font-size: .7rem; font-weight: 700; }
-.dash-week-count.green { color: #10B981; }
+.dash-week-count.green { color: #10B981 !important; }
 .dash-week-count.muted { color: var(--gray-500); }
 
 /* Bottom grid: Today + Sophia */
@@ -800,34 +800,76 @@ ul { list-style: none; }
 .gcal-evt.purple { background: rgba(139,92,246,0.15); color: #A78BFA; border-color: #8B5CF6; }
 .gcal-evt span { display: block; font-weight: 400; opacity: .7; font-size: .52rem; }
 
-/* Responsive dashboard */
-@media (max-width: 768px) {
-  .dash-stats { grid-template-columns: repeat(2, 1fr); }
-  .dash-week-grid { grid-template-columns: repeat(4, 1fr); }
-  .dash-bottom { grid-template-columns: 1fr; }
-  .gcal-header, .gcal-row { grid-template-columns: 40px repeat(7, 1fr); }
-  .gcal-evt { font-size: .5rem; padding: 2px 3px; }
-}
+/* MacBook base hidden */
+.macbook-base, .macbook-bottom { display: none; }
 
-/* MacBook base/hinge */
-.macbook-base {
-  width: 108%; margin-left: -4%;
-  height: 14px;
-  background: linear-gradient(to bottom, #444, #2a2a2a, #333);
-  border-radius: 0 0 8px 8px;
-  position: relative;
+/* Responsive dashboard - tablet */
+@media (max-width: 1024px) {
+  .macbook { max-width: 100%; transform: none; }
+  .dash-stats { grid-template-columns: repeat(2, 1fr); }
+  .dash-bottom { grid-template-columns: 1fr; }
 }
-.macbook-base::before {
-  content: ''; position: absolute;
-  top: 0; left: 50%; transform: translateX(-50%);
-  width: 18%; height: 4px;
-  background: #555; border-radius: 0 0 4px 4px;
+/* Responsive dashboard - mobile */
+@media (max-width: 768px) {
+  .dashboard-section { padding: 48px 0; }
+  .macbook-screen { border-radius: 10px; }
+  .browser-bar { padding: 8px 10px; gap: 8px; }
+  .browser-url { font-size: .62rem; padding: 5px 8px; }
+  .browser-tabs { display: none; }
+  .browser-dots span { width: 10px; height: 10px; }
+  .dash-navbar { padding: 8px 12px; flex-wrap: wrap; gap: 6px; }
+  .dash-nav-left { gap: 8px; flex-wrap: wrap; }
+  .dash-tab { font-size: .68rem; }
+  .dash-tab.disabled { display: none; }
+  .dash-logo-icon { width: 24px; height: 24px; }
+  .dash-logo-icon svg { width: 12px; height: 12px; }
+  .dash-brand { font-size: .78rem; }
+  .dash-avatar { width: 28px; height: 28px; font-size: .6rem; }
+  .dash-content { padding: 10px 12px; }
+  .dash-stats { grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 10px; }
+  .dash-stat-card { padding: 10px 12px; }
+  .dash-stat-label { font-size: .52rem; margin-bottom: 6px; }
+  .dash-stat-value { font-size: 1.3rem; }
+  .dash-stat-sub { font-size: .6rem; }
+  .dash-week-view { padding: 10px 12px; margin-bottom: 10px; }
+  .dash-week-grid { grid-template-columns: repeat(7, 1fr); gap: 4px; }
+  .dash-week-day { padding: 6px 2px; border-radius: 6px; }
+  .dash-week-name { font-size: .5rem; }
+  .dash-week-num { font-size: .8rem; margin-bottom: 4px; }
+  .dash-week-dots span { width: 4px; height: 4px; }
+  .dash-week-count { font-size: .6rem; }
+  .dash-card-header { margin-bottom: 8px; }
+  .dash-card-title { font-size: .75rem; }
+  .dash-link { font-size: .58rem; padding: 3px 8px; }
+  .dash-bottom { grid-template-columns: 1fr; gap: 10px; }
+  .dash-today, .dash-sophia { padding: 10px 12px; }
+  .dash-appt { gap: 8px; padding: 8px 0; }
+  .dash-appt-time { font-size: .75rem; min-width: 40px; }
+  .dash-appt-info strong { font-size: .72rem; }
+  .dash-appt-info span { font-size: .6rem; }
+  .dash-badge { font-size: .52rem; padding: 3px 6px; }
+  .s-text { font-size: .68rem; }
+  .s-time { font-size: .58rem; }
+  .s-dot { width: 6px; height: 6px; }
+  .dash-sophia-item { gap: 6px; padding: 7px 0; }
+  /* Calendar mobile */
+  .gcal-header, .gcal-row { grid-template-columns: 32px repeat(7, 1fr); }
+  .gcal-time { font-size: .5rem; padding: 1px 3px 0; }
+  .gcal-day-head { font-size: .48rem; padding: 6px 1px; }
+  .gcal-day-head .gnum { font-size: .6rem; }
+  .gcal-day-head.today .gnum { width: 18px; height: 18px; line-height: 18px; font-size: .55rem; }
+  .gcal-evt { font-size: .46rem; padding: 1px 2px; border-left-width: 2px; }
+  .gcal-evt span { font-size: .4rem; }
+  .gcal-slot { min-height: 36px; }
+  .gcal-body { max-height: 260px; }
 }
-.macbook-bottom {
-  width: 114%; margin-left: -7%;
-  height: 6px;
-  background: linear-gradient(to bottom, #2a2a2a, #1a1a1a);
-  border-radius: 0 0 12px 12px;
+/* Extra small */
+@media (max-width: 400px) {
+  .dash-stats { grid-template-columns: 1fr 1fr; gap: 6px; }
+  .dash-stat-value { font-size: 1.1rem; }
+  .dash-week-day { padding: 4px 1px; }
+  .dash-week-num { font-size: .7rem; }
+  .dash-week-dots { display: none; }
 }
 
 /* ══════════════════════════════════════
@@ -1073,9 +1115,6 @@ ul { list-style: none; }
   .sophia-feat { justify-content: center; text-align: left; }
   .features-grid { grid-template-columns: repeat(2, 1fr); }
   .pricing-grid { grid-template-columns: repeat(2, 1fr); }
-  .dash-stats { grid-template-columns: repeat(2, 1fr); }
-  .dash-grid { grid-template-columns: 1fr; }
-  .dash-frame { transform: none; }
 }
 @media(max-width:768px) {
   .hero { padding: 100px 0 48px; }
@@ -1089,11 +1128,6 @@ ul { list-style: none; }
   .hero-buttons { flex-direction: column; align-items: stretch; max-width: 360px; margin-left: auto; margin-right: auto; }
   .cta-box { padding: 48px 24px; }
   .footer .container { flex-direction: column; text-align: center; }
-  .dash-stats { grid-template-columns: 1fr 1fr; }
-  .dash-topbar-left { gap: 12px; }
-  .dash-nav-item { font-size: .7rem; }
-  .dash-content { padding: 12px; }
-  .dash-stat-value { font-size: 1.3rem; }
 }
 @media(max-width:480px) {
   .hero { padding: 88px 0 40px; }
@@ -1103,10 +1137,6 @@ ul { list-style: none; }
   .hero-buttons { margin-bottom: 32px; }
   .btn-main, .btn-ghost { padding: 14px 24px; font-size: .88rem; }
   .phone-frame { max-width: 260px; }
-  .dash-stats { grid-template-columns: 1fr; }
-  .dash-topbar { padding: 10px 12px; }
-  .dash-nav-item { display: none; }
-  .dash-nav-item.active { display: inline; }
   .section-head h2 { font-size: 1.4rem; }
   .exp-head h2 { font-size: 1.4rem; }
 }
@@ -1344,11 +1374,11 @@ ul { list-style: none; }
                 <div class="dash-nav-left">
                   <div class="dash-logo-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg></div>
                   <span class="dash-brand">Agenda<em>AI</em></span>
-                  <span class="dash-tab active">Dashboard</span>
-                  <span class="dash-tab">Agenda</span>
-                  <span class="dash-tab">Serviços</span>
-                  <span class="dash-tab">WhatsApp</span>
-                  <span class="dash-tab">Config.</span>
+                  <span class="dash-tab active" data-view="dashboard">Dashboard</span>
+                  <span class="dash-tab" data-view="agenda">Agenda</span>
+                  <span class="dash-tab disabled">Serviços</span>
+                  <span class="dash-tab disabled">WhatsApp</span>
+                  <span class="dash-tab disabled">Config.</span>
                 </div>
                 <div class="dash-avatar">FO</div>
               </div>
@@ -2050,18 +2080,18 @@ document.querySelectorAll('a[href^="#"]').forEach(a =>
 
 // ========== DASHBOARD INTERACTION ==========
 (function() {
-  const tabs = document.querySelectorAll('.dash-tab');
+  const allTabs = document.querySelectorAll('.dash-tab');
+  const clickableTabs = document.querySelectorAll('.dash-tab[data-view]');
   const dashView = document.getElementById('dashDashView');
   const agendaView = document.getElementById('dashAgendaView');
   if (!dashView || !agendaView) return;
 
-  // Tab switching: Dashboard vs Agenda
-  tabs.forEach(tab => {
+  // Tab switching: only Dashboard and Agenda are clickable
+  clickableTabs.forEach(tab => {
     tab.addEventListener('click', function() {
-      tabs.forEach(t => t.classList.remove('active'));
+      allTabs.forEach(t => t.classList.remove('active'));
       this.classList.add('active');
-      const label = this.textContent.trim();
-      if (label === 'Agenda') {
+      if (this.dataset.view === 'agenda') {
         dashView.classList.add('hidden');
         agendaView.classList.add('active');
       } else {
