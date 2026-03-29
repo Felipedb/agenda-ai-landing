@@ -1,0 +1,1392 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agenda AI - Agendamento Inteligente via WhatsApp</title>
+<meta name="description" content="Automatize o agendamento do seu negócio com IA via WhatsApp. Pare de perder clientes por falta de atendimento.">
+<meta property="og:title" content="Agenda AI - Agendamento Inteligente via WhatsApp">
+<meta property="og:description" content="Seu assistente virtual atende no WhatsApp 24h, agenda serviços e envia lembretes automaticamente.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://agendaiassistente.com">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════
+   RESET & TOKENS
+   ══════════════════════════════════════ */
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+
+:root {
+  --orange: #F97316;
+  --orange-light: #FB923C;
+  --orange-dark: #EA580C;
+  --blue: #3B82F6;
+  --blue-light: #60A5FA;
+  --blue-dark: #1E3A8A;
+  --navy: #0B1120;
+  --navy-light: #111827;
+  --navy-card: rgba(255,255,255,0.04);
+  --wa-green: #075E54;
+  --wa-dark: #0B141A;
+  --wa-msg: #1F2C34;
+  --wa-out: #005C4B;
+  --white: #FFFFFF;
+  --gray-100: #F3F4F6;
+  --gray-200: #E5E7EB;
+  --gray-300: #D1D5DB;
+  --gray-400: #9CA3AF;
+  --gray-500: #6B7280;
+  --success: #10B981;
+  --font: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --radius: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+}
+
+body {
+  font-family: var(--font);
+  background: var(--navy);
+  color: var(--white);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+a { text-decoration: none; color: inherit; }
+img { max-width: 100%; display: block; }
+button { cursor: pointer; border: none; font-family: var(--font); }
+ul { list-style: none; }
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+/* ══════════════════════════════════════
+   NAVBAR
+   ══════════════════════════════════════ */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 16px 0;
+  transition: all .3s ease;
+}
+.nav.scrolled {
+  background: rgba(11,17,32,0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.nav .container { display: flex; align-items: center; justify-content: space-between; }
+.nav-logo {
+  font-weight: 800; font-size: 1.4rem;
+  display: flex; align-items: center; gap: 8px;
+  letter-spacing: -0.02em;
+}
+.nav-logo svg { flex-shrink: 0; }
+.nav-logo em { font-style: normal; color: var(--orange); }
+.nav-menu { display: flex; align-items: center; gap: 32px; }
+.nav-menu a {
+  font-size: .88rem; font-weight: 500;
+  color: var(--gray-400); transition: color .2s;
+}
+.nav-menu a:hover { color: var(--white); }
+.nav-cta {
+  padding: 10px 24px;
+  background: var(--orange); color: var(--white) !important;
+  border-radius: 999px;
+  font-weight: 700; font-size: .88rem;
+  transition: all .2s;
+}
+.nav-cta:hover {
+  background: var(--orange-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(249,115,22,0.3);
+}
+.nav-toggle { display: none; background: none; color: var(--white); padding: 8px; }
+@media(max-width:768px) {
+  .nav-menu { display: none; }
+  .nav-toggle { display: block; }
+  .nav-menu.open {
+    display: flex; flex-direction: column;
+    position: absolute; top: 100%; left: 0; right: 0;
+    background: rgba(11,17,32,.98);
+    backdrop-filter: blur(20px);
+    padding: 24px; gap: 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+}
+
+/* ══════════════════════════════════════
+   HERO
+   ══════════════════════════════════════ */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute; inset: 0; z-index: 0;
+  background:
+    url('https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=1920&q=80&auto=format')
+    center/cover no-repeat;
+}
+.hero-bg::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(135deg,
+    rgba(11,17,32,0.94) 0%,
+    rgba(11,17,32,0.88) 40%,
+    rgba(11,17,32,0.78) 100%
+  );
+}
+.hero-bg::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(180deg,
+    rgba(11,17,32,0.5) 0%, transparent 20%, transparent 80%, var(--navy) 100%
+  );
+}
+.hero .container {
+  position: relative; z-index: 10;
+  display: grid;
+  grid-template-columns: 1fr 310px;
+  gap: 60px;
+  align-items: center;
+  padding-top: 100px;
+  padding-bottom: 40px;
+}
+
+/* Hero Left */
+.hero-left { max-width: 600px; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 18px;
+  background: rgba(249,115,22,0.12);
+  border: 1px solid rgba(249,115,22,0.25);
+  border-radius: 999px;
+  font-size: .8rem; font-weight: 600;
+  color: var(--orange-light);
+  margin-bottom: 24px;
+}
+.hero-badge .pulse {
+  width: 8px; height: 8px;
+  background: var(--orange); border-radius: 50%;
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.8)} }
+
+.hero h1 {
+  font-size: clamp(2.4rem, 5vw, 3.8rem);
+  font-weight: 900; line-height: 1.05;
+  letter-spacing: -0.03em;
+  margin-bottom: 24px;
+  text-transform: uppercase;
+}
+.hero h1 .orange { color: var(--orange); }
+.hero-desc {
+  font-size: 1.05rem; color: var(--gray-300);
+  line-height: 1.7; margin-bottom: 32px; max-width: 500px;
+}
+.hero-buttons {
+  display: flex; align-items: center; gap: 16px;
+  flex-wrap: wrap; margin-bottom: 40px;
+}
+.btn-main {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 16px 32px;
+  background: var(--orange); color: var(--white);
+  border-radius: 999px;
+  font-weight: 700; font-size: .95rem;
+  transition: all .2s;
+  box-shadow: 0 4px 24px rgba(249,115,22,0.35);
+  text-transform: uppercase; letter-spacing: 0.02em;
+}
+.btn-main:hover {
+  background: var(--orange-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(249,115,22,0.45);
+}
+.btn-ghost {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 16px 28px;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.15);
+  color: var(--white);
+  border-radius: 999px;
+  font-weight: 600; font-size: .95rem;
+  transition: all .2s;
+  text-transform: uppercase; letter-spacing: 0.02em;
+}
+.btn-ghost:hover {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.3);
+}
+.hero-proof { display: flex; align-items: center; gap: 14px; }
+.sophia-mini {
+  width: 44px; height: 44px; border-radius: 50%;
+  border: 2px solid var(--orange); object-fit: cover;
+}
+.proof-text { font-size: .85rem; color: var(--gray-400); }
+.proof-text strong { color: var(--white); font-weight: 600; }
+
+/* Hero Right - Phone Frame */
+.phone-frame {
+  width: 100%; max-width: 310px;
+  background: #1a1a1a;
+  border-radius: 36px;
+  padding: 10px;
+  box-shadow:
+    0 32px 64px rgba(0,0,0,0.5),
+    0 0 0 1px rgba(255,255,255,0.08),
+    inset 0 0 0 1px rgba(255,255,255,0.04);
+  animation: phone-in .8s ease-out;
+  position: relative;
+}
+@keyframes phone-in {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.phone-notch {
+  width: 100px; height: 24px;
+  background: #1a1a1a;
+  border-radius: 0 0 14px 14px;
+  margin: 0 auto;
+  position: relative; z-index: 20;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.phone-notch::before {
+  content: ''; width: 8px; height: 8px;
+  background: #2a2a2a; border-radius: 50%;
+  border: 1px solid #333;
+}
+.phone-speaker {
+  width: 50px; height: 4px;
+  background: #2a2a2a; border-radius: 4px;
+}
+.wa-widget {
+  width: 100%;
+  background: var(--wa-dark);
+  border-radius: 26px;
+  overflow: hidden;
+}
+.phone-home {
+  width: 120px; height: 4px;
+  background: rgba(255,255,255,0.2); border-radius: 4px;
+  margin: 10px auto 4px;
+}
+.wa-topbar {
+  background: var(--wa-green);
+  padding: 10px 12px;
+  display: flex; align-items: center; gap: 8px;
+}
+.wa-topbar-back { color: rgba(255,255,255,0.8); display: flex; align-items: center; }
+.wa-topbar-avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--orange), var(--orange-dark));
+  display: flex; align-items: center; justify-content: center;
+  font-size: .75rem; font-weight: 800; color: var(--white);
+}
+.wa-topbar-info { flex: 1; }
+.wa-topbar-name { font-size: .8rem; font-weight: 600; color: var(--white); }
+.wa-topbar-status { font-size: .65rem; color: rgba(255,255,255,0.7); }
+.wa-topbar-icons { display: flex; gap: 12px; color: rgba(255,255,255,0.8); }
+.wa-body {
+  padding: 10px 10px;
+  height: 420px;
+  display: flex; flex-direction: column; gap: 6px;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  background:
+    url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+.wa-body::-webkit-scrollbar { width: 4px; }
+.wa-body::-webkit-scrollbar-track { background: transparent; }
+.wa-body::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 4px; }
+.wa-body::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.25); }
+.wa-date-chip {
+  align-self: center;
+  padding: 4px 14px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 8px;
+  font-size: .7rem; color: rgba(255,255,255,0.5);
+  margin-bottom: 4px;
+}
+.wa-msg {
+  max-width: 85%; padding: 6px 10px;
+  border-radius: 8px;
+  font-size: .72rem; line-height: 1.4;
+  position: relative;
+}
+.wa-in {
+  background: var(--wa-msg); color: #E9EDEF;
+  align-self: flex-start; border-top-left-radius: 2px;
+}
+.wa-out {
+  background: var(--wa-out); color: #E9EDEF;
+  align-self: flex-end; border-top-right-radius: 2px;
+}
+.wa-time {
+  font-size: .55rem; color: rgba(255,255,255,0.4);
+  text-align: right; margin-top: 2px;
+  display: flex; align-items: center; justify-content: flex-end; gap: 3px;
+}
+.wa-check { color: #53BDEB; }
+.wa-typing-dot {
+  display: inline-block;
+  width: 6px; height: 6px;
+  background: rgba(255,255,255,0.35); border-radius: 50%;
+  margin-right: 3px;
+  animation: wa-dot 1.4s infinite;
+}
+.wa-typing-dot:nth-child(2){animation-delay:.2s}
+.wa-typing-dot:nth-child(3){animation-delay:.4s}
+@keyframes wa-dot {
+  0%,60%,100%{transform:translateY(0);opacity:.4}
+  30%{transform:translateY(-4px);opacity:1}
+}
+.wa-option {
+  display: inline-block;
+  padding: 2px 0;
+  font-size: .8rem;
+}
+.wa-buttons {
+  display: flex; flex-direction: column; gap: 4px;
+  margin-top: 6px;
+}
+.wa-btn {
+  display: flex; align-items: center; justify-content: center; gap: 4px;
+  padding: 7px 10px;
+  background: transparent;
+  border: 1px solid rgba(0,168,132,0.45);
+  border-radius: 6px;
+  color: #00A884;
+  font-size: .68rem; font-weight: 600;
+  font-family: var(--font);
+  text-align: center;
+}
+.wa-btn.primary {
+  background: #00A884;
+  border-color: #00A884;
+  color: var(--white);
+}
+.wa-btn-icon { font-size: .85rem; line-height: 1; }
+
+.wa-inputbar {
+  padding: 6px 8px;
+  display: flex; align-items: center; gap: 6px;
+  background: var(--wa-dark);
+}
+.wa-input-box {
+  flex: 1; padding: 8px 12px;
+  background: var(--wa-msg);
+  border: none; border-radius: 20px;
+  color: rgba(255,255,255,0.4);
+  font-size: .72rem; font-family: var(--font);
+  outline: none;
+}
+.wa-send-btn {
+  width: 34px; height: 34px;
+  background: #00A884; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.wa-send-btn svg { width: 18px; height: 18px; }
+
+/* ══════════════════════════════════════
+   EXPERIENCIA DO CLIENTE
+   ══════════════════════════════════════ */
+.experience { padding: 96px 0; position: relative; }
+.exp-head { text-align: center; max-width: 640px; margin: 0 auto 56px; }
+.exp-head h2 {
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 900; letter-spacing: -0.02em;
+  line-height: 1.15; margin-bottom: 16px;
+}
+.exp-head > p {
+  font-size: 1rem; color: var(--gray-400);
+  line-height: 1.7;
+}
+.exp-journey {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 24px; position: relative;
+}
+.exp-journey::before {
+  content: ''; position: absolute; top: 44px;
+  left: calc(16.66% + 12px); right: calc(16.66% + 12px);
+  height: 2px; background: linear-gradient(90deg, #00A884, rgba(0,168,132,0.2));
+  z-index: 0;
+}
+.exp-step {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 16px; padding: 32px 24px;
+  text-align: center; position: relative; z-index: 1;
+  transition: transform .3s, border-color .3s;
+}
+.exp-step:hover { transform: translateY(-4px); border-color: rgba(0,168,132,0.3); }
+.exp-step-icon {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: rgba(0,168,132,0.12);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 20px; font-size: 1.5rem;
+}
+.exp-step h3 {
+  font-size: 1rem; font-weight: 700;
+  margin-bottom: 8px; color: var(--white);
+}
+.exp-step p {
+  font-size: .85rem; color: var(--gray-400);
+  line-height: 1.6;
+}
+.exp-step-num {
+  position: absolute; top: -12px; left: 50%;
+  transform: translateX(-50%);
+  width: 24px; height: 24px; border-radius: 50%;
+  background: #00A884; color: var(--white);
+  font-size: .7rem; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* Stats Bar */
+.stats-bar {
+  padding: 48px 0;
+  background: rgba(255,255,255,0.02);
+  border-top: 1px solid rgba(255,255,255,0.04);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.stats-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 24px; text-align: center;
+}
+.stat-item h3 {
+  font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+  font-weight: 900; color: var(--orange);
+  letter-spacing: -0.02em;
+}
+.stat-item p { font-size: .82rem; color: var(--gray-400); margin-top: 4px; line-height: 1.4; }
+
+/* ══════════════════════════════════════
+   SECTION COMMON
+   ══════════════════════════════════════ */
+.section-tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 16px;
+  background: rgba(59,130,246,0.08);
+  border: 1px solid rgba(59,130,246,0.18);
+  border-radius: 999px;
+  font-size: .78rem; font-weight: 600;
+  color: var(--blue-light); margin-bottom: 16px;
+}
+.section-head { text-align: center; margin-bottom: 64px; }
+.section-head h2 {
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  font-weight: 900; letter-spacing: -0.02em;
+  line-height: 1.15; margin-bottom: 16px;
+}
+.section-head p {
+  font-size: 1.05rem; color: var(--gray-400);
+  max-width: 560px; margin: 0 auto; line-height: 1.7;
+}
+
+/* ══════════════════════════════════════
+   COMO FUNCIONA (HOW IT WORKS)
+   ══════════════════════════════════════ */
+.how { padding: 96px 0; position: relative; }
+.how::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 50% at 50% 50%, rgba(249,115,22,0.04), transparent);
+}
+.how .container { position: relative; z-index: 1; }
+.steps {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.step {
+  background: var(--navy-card);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: var(--radius-lg);
+  padding: 36px 28px;
+  text-align: center;
+  transition: all .3s;
+  position: relative;
+}
+.step:hover {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(249,115,22,0.2);
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.2);
+}
+.step-num {
+  width: 48px; height: 48px;
+  background: var(--orange); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; font-weight: 900; color: var(--white);
+  margin: 0 auto 20px;
+  box-shadow: 0 4px 16px rgba(249,115,22,0.3);
+}
+.step h3 {
+  font-size: 1.05rem; font-weight: 700;
+  margin-bottom: 8px;
+}
+.step p {
+  font-size: .88rem; color: var(--gray-400);
+  line-height: 1.65;
+}
+
+/* ══════════════════════════════════════
+   FEATURES
+   ══════════════════════════════════════ */
+.features { padding: 96px 0; position: relative; }
+.features-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+}
+.f-card {
+  background: var(--navy-card);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: var(--radius-lg);
+  padding: 32px 28px;
+  transition: all .3s; position: relative; overflow: hidden;
+}
+.f-card::after {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--orange), transparent);
+  opacity: 0; transition: opacity .3s;
+}
+.f-card:hover {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(249,115,22,0.15);
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.2);
+}
+.f-card:hover::after { opacity: 1; }
+.f-icon {
+  width: 48px; height: 48px;
+  border-radius: var(--radius);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 20px;
+}
+.f-icon.orange { background: rgba(249,115,22,0.1); border: 1px solid rgba(249,115,22,0.18); }
+.f-icon.blue { background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.15); }
+.f-icon svg { width: 24px; height: 24px; }
+.f-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; }
+.f-card p { font-size: .88rem; color: var(--gray-400); line-height: 1.65; }
+
+/* ══════════════════════════════════════
+   SOPHIA SECTION
+   ══════════════════════════════════════ */
+.sophia-section {
+  padding: 96px 0; position: relative; overflow: hidden;
+  background: #FBFBFD;
+  color: var(--navy);
+}
+.sophia-section .container {
+  position: relative; z-index: 1;
+  display: grid; grid-template-columns: 340px 1fr;
+  gap: 64px; align-items: center;
+}
+.sophia-img-wrap {
+  display: flex; justify-content: center;
+  position: relative;
+}
+.sophia-img-wrap img {
+  max-height: 460px; width: auto;
+  position: relative; z-index: 1;
+}
+.sophia-content { max-width: 500px; }
+.sophia-content .section-tag {
+  background: rgba(249,115,22,0.08);
+  border-color: rgba(249,115,22,0.2);
+  color: var(--orange-dark);
+}
+.sophia-content h2 {
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 900; letter-spacing: -0.02em;
+  line-height: 1.15; margin-bottom: 16px;
+  color: var(--navy);
+}
+.sophia-content > p {
+  font-size: 1rem; color: var(--gray-500);
+  line-height: 1.7; margin-bottom: 28px;
+}
+.sophia-features { display: flex; flex-direction: column; gap: 14px; }
+.sophia-feat { display: flex; align-items: flex-start; gap: 12px; }
+.sophia-feat-icon {
+  width: 36px; height: 36px; flex-shrink: 0;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+}
+.sophia-feat-icon.orange { background: rgba(249,115,22,0.12); }
+.sophia-feat-icon.blue { background: rgba(59,130,246,0.1); }
+.sophia-feat-icon svg { width: 18px; height: 18px; }
+.sophia-feat h4 { font-size: .92rem; font-weight: 700; margin-bottom: 2px; color: var(--navy); }
+.sophia-feat p { font-size: .84rem; color: var(--gray-500); line-height: 1.55; }
+
+/* ══════════════════════════════════════
+   PRICING
+   ══════════════════════════════════════ */
+.pricing { padding: 96px 0; }
+.pricing-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 20px; max-width: 1000px; margin: 0 auto;
+}
+.p-card {
+  background: var(--navy-card);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: var(--radius-xl);
+  padding: 32px 28px 24px;
+  transition: all .3s; position: relative;
+}
+.p-card:hover { transform: translateY(-4px); border-color: rgba(255,255,255,0.12); }
+.p-card.pop {
+  border-color: var(--orange);
+  background: linear-gradient(180deg, rgba(249,115,22,0.06), var(--navy-card));
+  box-shadow: 0 0 40px rgba(249,115,22,0.08);
+}
+.p-badge {
+  position: absolute; top: -13px; left: 50%; transform: translateX(-50%);
+  padding: 5px 18px;
+  background: var(--orange); border-radius: 999px;
+  font-size: .72rem; font-weight: 700; white-space: nowrap;
+}
+.p-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
+.p-price { display: flex; align-items: baseline; gap: 4px; margin-bottom: 12px; }
+.p-price small { font-size: 1rem; color: var(--gray-400); font-weight: 600; }
+.p-price strong { font-size: 2.5rem; font-weight: 900; letter-spacing: -0.03em; }
+.p-price span { font-size: .82rem; color: var(--gray-500); }
+.p-desc {
+  font-size: .84rem; color: var(--gray-400);
+  margin-bottom: 20px; padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.p-features { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+.p-features li {
+  display: flex; align-items: center; gap: 10px;
+  font-size: .85rem; color: var(--gray-300);
+}
+.p-features li svg { flex-shrink: 0; }
+.btn-full {
+  display: block; width: 100%; padding: 14px;
+  border-radius: 999px;
+  font-size: .92rem; font-weight: 700;
+  text-align: center; transition: all .2s;
+}
+.btn-full.solid {
+  background: var(--orange); color: var(--white);
+  box-shadow: 0 4px 20px rgba(249,115,22,0.3);
+}
+.btn-full.solid:hover { background: var(--orange-dark); transform: translateY(-2px); }
+.btn-full.outline {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.12);
+  color: var(--white);
+}
+.btn-full.outline:hover { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.2); }
+
+/* ══════════════════════════════════════
+   FAQ
+   ══════════════════════════════════════ */
+.faq { padding: 96px 0; }
+.faq-grid { max-width: 700px; margin: 0 auto; }
+.faq-item { border-bottom: 1px solid rgba(255,255,255,0.06); }
+.faq-q {
+  width: 100%; padding: 20px 0;
+  background: none; color: var(--white);
+  font-size: .95rem; font-weight: 600;
+  text-align: left;
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 16px; font-family: var(--font);
+}
+.faq-q svg { flex-shrink: 0; transition: transform .3s; color: var(--gray-400); }
+.faq-q.active svg { transform: rotate(45deg); color: var(--orange); }
+.faq-a {
+  max-height: 0; overflow: hidden;
+  transition: max-height .3s ease, padding .3s ease;
+}
+.faq-a.open { max-height: 200px; padding-bottom: 20px; }
+.faq-a p { font-size: .88rem; color: var(--gray-400); line-height: 1.65; }
+
+/* ══════════════════════════════════════
+   CTA FINAL
+   ══════════════════════════════════════ */
+.cta { padding: 96px 0; }
+.cta-box {
+  position: relative;
+  border-radius: var(--radius-xl);
+  padding: 72px 48px; text-align: center;
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(249,115,22,0.1), rgba(59,130,246,0.06));
+  border: 1px solid rgba(249,115,22,0.12);
+}
+.cta-box::before {
+  content: ''; position: absolute; inset: 0;
+  background:
+    radial-gradient(circle 350px at 20% 50%, rgba(249,115,22,0.08), transparent),
+    radial-gradient(circle 350px at 80% 50%, rgba(59,130,246,0.06), transparent);
+}
+.cta-content { position: relative; z-index: 1; }
+.cta h2 {
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  font-weight: 900; letter-spacing: -0.02em;
+  margin-bottom: 16px;
+}
+.cta p {
+  font-size: 1.05rem; color: var(--gray-300);
+  max-width: 480px; margin: 0 auto 32px; line-height: 1.7;
+}
+
+/* ══════════════════════════════════════
+   FOOTER
+   ══════════════════════════════════════ */
+.footer {
+  padding: 32px 0;
+  border-top: 1px solid rgba(255,255,255,0.04);
+}
+.footer .container {
+  display: flex; justify-content: space-between;
+  align-items: center; flex-wrap: wrap; gap: 16px;
+}
+.footer p { font-size: .82rem; color: var(--gray-500); }
+.footer-links { display: flex; gap: 24px; }
+.footer-links a { font-size: .82rem; color: var(--gray-400); transition: color .2s; }
+.footer-links a:hover { color: var(--white); }
+
+/* ══════════════════════════════════════
+   RESPONSIVE
+   ══════════════════════════════════════ */
+@media(max-width:1024px) {
+  .hero .container { grid-template-columns: 1fr; text-align: center; gap: 40px; padding-top: 120px; }
+  .hero-left { max-width: 100%; margin: 0 auto; }
+  .hero-desc { margin-left: auto; margin-right: auto; }
+  .hero-buttons { justify-content: center; }
+  .hero-proof { justify-content: center; }
+  .phone-frame { margin: 0 auto; max-width: 280px; }
+  .exp-journey { grid-template-columns: 1fr 1fr; }
+  .exp-journey::before { display: none; }
+  .steps { grid-template-columns: repeat(2, 1fr); }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .sophia-section .container { grid-template-columns: 1fr; text-align: center; }
+  .sophia-img-wrap { margin-bottom: 20px; }
+  .sophia-content { max-width: 100%; margin: 0 auto; }
+  .sophia-feat { justify-content: center; text-align: left; }
+  .features-grid { grid-template-columns: repeat(2, 1fr); }
+  .pricing-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media(max-width:768px) {
+  .exp-journey { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
+  .sophia-stats-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .features-grid { grid-template-columns: 1fr; }
+  .steps { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
+  .pricing-grid { grid-template-columns: 1fr; max-width: 360px; }
+  .hero-buttons { flex-direction: column; align-items: stretch; max-width: 360px; margin-left: auto; margin-right: auto; }
+  .cta-box { padding: 48px 24px; }
+  .footer .container { flex-direction: column; text-align: center; }
+}
+
+/* ══════════════════════════════════════
+   SCROLL REVEAL + REDUCED MOTION
+   ══════════════════════════════════════ */
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity .6s ease, transform .6s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+@media(prefers-reduced-motion:reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- ========== NAV ========== -->
+<nav class="nav" id="nav">
+  <div class="container">
+    <a href="#" class="nav-logo">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+        <rect width="28" height="28" rx="8" fill="#F97316"/>
+        <path d="M8 7h12v2H8zm0 4h12v2H8zm0 4h8v2H8zm0 4h10v2H8z" fill="#fff"/>
+      </svg>
+      Agenda<em>AI</em>
+    </a>
+    <ul class="nav-menu" id="navMenu">
+      <li><a href="#como">Como Funciona</a></li>
+      <li><a href="#features">Recursos</a></li>
+      <li><a href="#pricing">Preços</a></li>
+      <li><a href="#faq">FAQ</a></li>
+      <li><a href="#" class="nav-cta">Começar Grátis</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu">
+      <svg width="24" height="24" fill="none"><path d="M3 6h18M3 12h18M3 18h18" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- ========== HERO ========== -->
+<section class="hero">
+  <div class="hero-bg" role="img" aria-label="Equipe profissional trabalhando"></div>
+  <div class="container">
+    <div class="hero-left">
+      <div class="hero-badge">
+        <span class="pulse"></span>
+        IA Conversacional para Agendamento
+      </div>
+      <h1>
+        AUTOMATIZE<br>
+        SEU ATENDIMENTO<br>
+        <span class="orange">COM IA</span>
+      </h1>
+      <p class="hero-desc">
+        Crie assistentes inteligentes em minutos, sem código. Atenda milhares de clientes simultaneamente com respostas precisas e personalizadas, 24 horas por dia.
+      </p>
+      <div class="hero-buttons">
+        <a href="#" class="btn-main">
+          Teste Grátis 7 Dias
+          <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="#como" class="btn-ghost">Como Funciona</a>
+      </div>
+      <div class="hero-proof">
+        <img src="sophia-avatar.png" alt="Sophia" class="sophia-mini">
+        <p class="proof-text">
+          <strong>+2.000 profissionais</strong> já automatizaram com Agenda AI
+        </p>
+      </div>
+    </div>
+
+    <!-- Phone with WhatsApp -->
+    <div class="phone-frame">
+      <div class="phone-notch">
+        <span class="phone-speaker"></span>
+      </div>
+      <div class="wa-widget">
+        <div class="wa-topbar">
+          <span class="wa-topbar-back">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          <div class="wa-topbar-avatar">SB</div>
+          <div class="wa-topbar-info">
+            <div class="wa-topbar-name">Studio Bella</div>
+            <div class="wa-topbar-status">online</div>
+          </div>
+          <div class="wa-topbar-icons">
+            <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M15.05 5A5 5 0 0119 8.95M15.05 1A9 9 0 0123 8.94M22 16.92v3a2 2 0 01-2.18 2A19.79 19.79 0 013.09 5.18 2 2 0 015.11 3h3a2 2 0 012 1.72c.13.81.36 1.6.68 2.34a2 2 0 01-.45 2.11L8.91 10.6a16 16 0 006.29 6.29l1.43-1.43a2 2 0 012.11-.45c.74.32 1.53.55 2.34.68a2 2 0 011.72 2.03z" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.5" fill="#fff"/><circle cx="12" cy="12" r="1.5" fill="#fff"/><circle cx="12" cy="19" r="1.5" fill="#fff"/></svg>
+          </div>
+        </div>
+        <div class="wa-body" id="waChat"></div>
+        <div class="wa-inputbar">
+          <input type="text" class="wa-input-box" placeholder="Mensagem" disabled>
+          <button class="wa-send-btn" aria-label="Enviar">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="phone-home"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== STATS ========== -->
+<section class="stats-bar">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-item reveal"><h3>98%</h3><p>preferem agendar<br>pelo WhatsApp</p></div>
+      <div class="stat-item reveal"><h3>70%</h3><p>menos faltas com<br>lembretes automáticos</p></div>
+      <div class="stat-item reveal"><h3>24/7</h3><p>Sophia nunca<br>tira folga</p></div>
+      <div class="stat-item reveal"><h3>5 min</h3><p>para configurar<br>e começar a usar</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== EXPERIENCIA DO CLIENTE ========== -->
+<section class="experience" id="experiencia">
+  <div class="container">
+    <div class="exp-head reveal">
+      <div class="section-tag">Experiência do Cliente</div>
+      <h2>Seu cliente agenda em 30 segundos. Só clicando.</h2>
+      <p>Nada de digitar. A Sophia mostra botões com opções de serviço, dia e horário. O cliente só toca na tela e pronto.</p>
+    </div>
+    <div class="exp-journey">
+      <div class="exp-step reveal">
+        <div class="exp-step-num">1</div>
+        <div class="exp-step-icon">👋</div>
+        <h3>Cliente envia "Oi"</h3>
+        <p>O cliente manda uma mensagem no WhatsApp e a Sophia responde na hora com uma saudação personalizada e botões de opções.</p>
+      </div>
+      <div class="exp-step reveal">
+        <div class="exp-step-num">2</div>
+        <div class="exp-step-icon">📅</div>
+        <h3>Escolhe dia e horário</h3>
+        <p>Com botões interativos, o cliente seleciona o serviço, a data e o horário disponível sem precisar digitar nada.</p>
+      </div>
+      <div class="exp-step reveal">
+        <div class="exp-step-num">3</div>
+        <div class="exp-step-icon">✅</div>
+        <h3>Confirmação instantânea</h3>
+        <p>A Sophia confirma o agendamento com todos os detalhes e envia lembretes automáticos antes do horário marcado.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== COMO FUNCIONA ========== -->
+<section class="how" id="como">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-tag">Como Funciona</div>
+      <h2>3 passos e você já tem um<br>atendente virtual só seu</h2>
+      <p>Configure uma vez e deixe a Sophia trabalhar por você.</p>
+    </div>
+    <div class="steps">
+      <div class="step reveal">
+        <div class="step-num">1</div>
+        <h3>Crie sua conta</h3>
+        <p>Cadastre-se gratuitamente e configure seus horários de atendimento em poucos cliques.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">2</div>
+        <h3>Conecte o WhatsApp</h3>
+        <p>Escaneie o QR Code com o celular do seu negócio. A Sophia assume na hora.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">3</div>
+        <h3>Sophia entra em ação</h3>
+        <p>Cada mensagem recebida, a Sophia responde, agenda e envia lembretes automaticamente.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FEATURES ========== -->
+<section class="features" id="features">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-tag">Recursos</div>
+      <h2>Tudo que você precisa para<br>nunca mais perder um cliente</h2>
+      <p>Um assistente inteligente, com a cara do seu negócio, que trabalha enquanto você descansa.</p>
+    </div>
+    <div class="features-grid">
+      <div class="f-card reveal">
+        <div class="f-icon orange"><svg viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke="#F97316" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <h3>Assistente com IA no WhatsApp</h3>
+        <p>Seu bot personalizado atende clientes, responde dúvidas e agenda serviços automaticamente, 24 horas por dia.</p>
+      </div>
+      <div class="f-card reveal">
+        <div class="f-icon blue"><svg viewBox="0 0 24 24" fill="none"><path d="M8 2v4m8-4v4M3 10h18M5 4h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V6a2 2 0 012-2z" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <h3>Agenda Inteligente</h3>
+        <p>Gerencia horários, evita conflitos e mostra apenas slots disponíveis. Seus clientes escolhem sem precisar ligar.</p>
+      </div>
+      <div class="f-card reveal">
+        <div class="f-icon orange"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#F97316" stroke-width="2"/><path d="M12 6v6l4 2" stroke="#F97316" stroke-width="2" stroke-linecap="round"/></svg></div>
+        <h3>Lembretes Automáticos</h3>
+        <p>Envie lembretes personalizados via WhatsApp antes de cada consulta. Reduza faltas em até 70%.</p>
+      </div>
+      <div class="f-card reveal">
+        <div class="f-icon blue"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2 2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <h3>Multi-serviço</h3>
+        <p>Configure quantos serviços quiser com preços, durações e horários diferentes. Cada um com sua agenda própria.</p>
+      </div>
+      <div class="f-card reveal">
+        <div class="f-icon orange"><svg viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2m8-10a4 4 0 100-8 4 4 0 000 8z" stroke="#F97316" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <h3>Seu Bot, Sua Marca</h3>
+        <p>Customize nome, tom de voz e personalidade do assistente. Ele fala com a identidade do seu negócio.</p>
+      </div>
+      <div class="f-card reveal">
+        <div class="f-icon blue"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="#3B82F6" stroke-width="2"/><path d="M3 9h18M9 21V9" stroke="#3B82F6" stroke-width="2"/></svg></div>
+        <h3>Dashboard Completo</h3>
+        <p>Acompanhe agendamentos, faturamento e métricas em tempo real com gráficos e relatórios detalhados.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== SOPHIA ========== -->
+<section class="sophia-section">
+  <div class="container">
+    <div class="sophia-img-wrap reveal">
+      <img src="sophia-phone.png" alt="Sophia - Tecnologia Virtual de Atendimento">
+    </div>
+    <div class="sophia-content reveal">
+      <div class="section-tag">Conheça a Sophia</div>
+      <h2>A tecnologia virtual por trás<br>do seu atendimento</h2>
+      <p>Sophia é a inteligência artificial do Agenda AI. Ela conversa com seus clientes no WhatsApp, entende o que precisam e resolve tudo em segundos, sem intervenção humana.</p>
+      <div class="sophia-features">
+        <div class="sophia-feat">
+          <div class="sophia-feat-icon orange"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2a10 10 0 1010 10A10 10 0 0012 2zm0 18a8 8 0 118-8 8 8 0 01-8 8zm4-9h-3V8a1 1 0 00-2 0v4a1 1 0 001 1h4a1 1 0 000-2z" fill="#F97316"/></svg></div>
+          <div>
+            <h4>Disponível 24 horas</h4>
+            <p>Sophia nunca tira folga. Seus clientes agendam a qualquer hora, inclusive de madrugada.</p>
+          </div>
+        </div>
+        <div class="sophia-feat">
+          <div class="sophia-feat-icon blue"><svg viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 12c0 4.418 2.865 8.166 6.839 9.489.467.155.96.155 1.427 0A12.02 12.02 0 0021 12c0-.778-.073-1.538-.214-2.272" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div>
+            <h4>A cara do seu negócio</h4>
+            <p>Personalize nome, tom de voz e identidade. O cliente sente que está falando com a sua empresa.</p>
+          </div>
+        </div>
+        <div class="sophia-feat">
+          <div class="sophia-feat-icon orange"><svg viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="#F97316" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div>
+            <h4>Respostas em segundos</h4>
+            <p>Sem fila de espera. Sophia responde, agenda e confirma antes que o cliente desista.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== PRICING ========== -->
+<section class="pricing" id="pricing">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-tag">Preços</div>
+      <h2>Planos que cabem no seu bolso</h2>
+      <p>Comece grátis sem limite de tempo. Sem cartão de crédito. Faça upgrade quando quiser.</p>
+    </div>
+    <div class="pricing-grid">
+      <!-- Gratis -->
+      <div class="p-card reveal">
+        <h3>Gratis</h3>
+        <div class="p-price"><small>R$</small><strong>0</strong><span>/mês</span></div>
+        <p class="p-desc">Para conhecer a Sophia</p>
+        <ul class="p-features">
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M20 6 9 17l-5-5" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>1 número de WhatsApp</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M20 6 9 17l-5-5" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Até 5 serviços</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M20 6 9 17l-5-5" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Agendamento automático</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M20 6 9 17l-5-5" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>30 agendamentos/mês</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M20 6 9 17l-5-5" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Dashboard Profissional</li>
+        </ul>
+        <a href="#" class="btn-full outline">Começar grátis</a>
+      </div>
+      <!-- Profissional -->
+      <div class="p-card pop reveal">
+        <div class="p-badge">Mais Popular</div>
+        <h3>Profissional</h3>
+        <div class="p-price"><small>R$</small><strong>49</strong><span>/mês</span></div>
+        <p class="p-desc">Para negócios em crescimento</p>
+        <ul class="p-features">
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M20 6 9 17l-5-5" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Agendamentos ilimitados</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M20 6 9 17l-5-5" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Até 5 profissionais</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M20 6 9 17l-5-5" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Lembretes automáticos</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M20 6 9 17l-5-5" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Painel completo</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M20 6 9 17l-5-5" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Suporte prioritário</li>
+        </ul>
+        <a href="#" class="btn-full solid">Começar agora</a>
+      </div>
+      <!-- Empresarial -->
+      <div class="p-card reveal">
+        <h3>Empresarial</h3>
+        <div class="p-price"><small>R$</small><strong>99</strong><span>/mês</span></div>
+        <p class="p-desc">Para equipes maiores</p>
+        <ul class="p-features">
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M20 6 9 17l-5-5" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Tudo do Profissional</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M20 6 9 17l-5-5" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Profissionais ilimitados</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M20 6 9 17l-5-5" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Relatórios e estatísticas</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M20 6 9 17l-5-5" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>API de integração</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M20 6 9 17l-5-5" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Suporte dedicado</li>
+        </ul>
+        <a href="#" class="btn-full outline">Falar com vendas</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FAQ ========== -->
+<section class="faq" id="faq">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-tag">Dúvidas Frequentes</div>
+      <h2>Perguntas frequentes</h2>
+      <p>Tudo que você precisa saber antes de começar.</p>
+    </div>
+    <div class="faq-grid reveal">
+      <div class="faq-item">
+        <button class="faq-q" onclick="this.classList.toggle('active');this.nextElementSibling.classList.toggle('open')">
+          Preciso ter conhecimento técnico para usar?
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path d="M12 5v14m-7-7h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+        <div class="faq-a"><p>Não! O Agenda AI foi feito para ser simples. Você conecta seu WhatsApp, configura seus serviços e horários, e o assistente já começa a funcionar. Tudo pelo painel, sem código.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="this.classList.toggle('active');this.nextElementSibling.classList.toggle('open')">
+          Funciona com qualquer tipo de negócio?
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path d="M12 5v14m-7-7h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+        <div class="faq-a"><p>Sim! Salões de beleza, consultórios, personal trainers, clínicas, barbearias, estúdios de tatuagem, escritórios e qualquer negócio que trabalhe com agendamento de horários.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="this.classList.toggle('active');this.nextElementSibling.classList.toggle('open')">
+          Posso personalizar o assistente com a minha marca?
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path d="M12 5v14m-7-7h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+        <div class="faq-a"><p>Com certeza! Você define o nome, tom de voz e personalidade do seu assistente. Ele vai atender com a identidade do seu negócio, não com uma marca genérica.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="this.classList.toggle('active');this.nextElementSibling.classList.toggle('open')">
+          Quanto tempo leva para configurar?
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path d="M12 5v14m-7-7h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+        <div class="faq-a"><p>Menos de 5 minutos. Basta escanear o QR Code do WhatsApp, cadastrar seus serviços e pronto. Seu assistente já estará online atendendo clientes.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="this.classList.toggle('active');this.nextElementSibling.classList.toggle('open')">
+          Posso cancelar a qualquer momento?
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path d="M12 5v14m-7-7h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+        <div class="faq-a"><p>Sim! Sem multa e sem burocracia. Você pode cancelar seu plano a qualquer momento direto pelo painel. Seus dados ficam disponíveis por 30 dias após o cancelamento.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== CTA FINAL ========== -->
+<section class="cta">
+  <div class="container">
+    <div class="cta-box reveal">
+      <div class="cta-content">
+        <h2>Pronto para nunca mais<br>perder um cliente?</h2>
+        <p>Junte-se a mais de 2.000 profissionais que já automatizaram seu atendimento e estão faturando mais.</p>
+        <a href="#" class="btn-main" style="display:inline-flex">
+          Começar Meu Teste Grátis
+          <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer class="footer">
+  <div class="container">
+    <p>&copy; 2026 Agenda AI Assistente. Todos os direitos reservados.</p>
+    <ul class="footer-links">
+      <li><a href="#">Termos de Uso</a></li>
+      <li><a href="#">Privacidade</a></li>
+      <li><a href="#">Contato</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script>
+// Nav scroll
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 40));
+
+// Mobile toggle
+document.getElementById('navToggle').addEventListener('click', () =>
+  document.getElementById('navMenu').classList.toggle('open'));
+
+// Scroll reveal
+const obs = new IntersectionObserver(e => e.forEach(el => {
+  if (el.isIntersecting) el.target.classList.add('visible');
+}), { threshold: .1, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(a =>
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const t = document.querySelector(a.getAttribute('href'));
+    if (t) { t.scrollIntoView({ behavior: 'smooth' }); document.getElementById('navMenu').classList.remove('open'); }
+  }));
+
+// ========== WHATSAPP DEMO CHAT ==========
+(function() {
+  const chat = document.getElementById('waChat');
+  if (!chat) return;
+
+  const PAUSE = 1000;
+  const TYPE_DELAY = 1400;
+
+  function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+  function addMsg(html, isUser) {
+    return new Promise(resolve => {
+      const div = document.createElement('div');
+      div.className = 'wa-msg ' + (isUser ? 'wa-out' : 'wa-in');
+      div.innerHTML = html;
+      div.style.opacity = '0';
+      div.style.transform = 'translateY(10px)';
+      chat.appendChild(div);
+      chat.scrollTop = chat.scrollHeight;
+      requestAnimationFrame(() => {
+        div.style.transition = 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)';
+        div.style.opacity = '1';
+        div.style.transform = 'translateY(0)';
+      });
+      setTimeout(resolve, 500);
+    });
+  }
+
+  function showTyping() {
+    const div = document.createElement('div');
+    div.className = 'wa-msg wa-in';
+    div.id = 'wa-typing';
+    div.style.padding = '10px 16px';
+    div.innerHTML = '<span class="wa-typing-dot"></span><span class="wa-typing-dot"></span><span class="wa-typing-dot"></span>';
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
+  }
+
+  function hideTyping() {
+    const t = document.getElementById('wa-typing');
+    if (t) t.remove();
+  }
+
+  function btns(items) {
+    return '<div class="wa-buttons">' +
+      items.map(b => '<div class="wa-btn' + (b.primary ? ' primary' : '') + '" data-id="' + b.id + '">' + b.label + '</div>').join('') +
+      '</div>';
+  }
+
+  async function highlightBtn(id) {
+    await sleep(1600);
+    const allBtns = chat.querySelectorAll('.wa-btn[data-id]');
+    let target = null;
+    allBtns.forEach(b => {
+      if (b.dataset.id === id && !b.classList.contains('primary') && !b.classList.contains('dim')) {
+        target = b;
+      }
+    });
+    if (target) {
+      target.parentElement.querySelectorAll('.wa-btn').forEach(b => {
+        if (b !== target) { b.style.opacity = '0.35'; }
+      });
+      target.classList.add('primary');
+    }
+    await sleep(700);
+  }
+
+  function time(t, check) {
+    return '<div class="wa-time">' + (check ? '<span class="wa-check">&#10003;&#10003;</span> ' : '') + t + '</div>';
+  }
+
+  async function runDemo() {
+    chat.innerHTML = '<div class="wa-date-chip">HOJE</div>';
+
+    // 1. Cliente manda "Oi"
+    await sleep(1200);
+    await addMsg('Oi' + time('10:30', true), true);
+
+    // 2. Bot digitando...
+    await sleep(PAUSE);
+    showTyping();
+    await sleep(TYPE_DELAY);
+    hideTyping();
+
+    // 3. Bot: boas-vindas humanizadas
+    await addMsg(
+      'Olá, <b>Ana</b>! 😊 Que bom ter você aqui!<br>Sou a assistente do <b>Studio Bella</b>.<br><br>Como posso te ajudar hoje?' +
+      btns([
+        {id:'agendar', label:'📅 Agendar Serviço', primary:true},
+        {id:'ver', label:'📋 Meus Agendamentos'},
+        {id:'cancelar', label:'✕ Cancelar Agendamento'}
+      ]) + time('10:30')
+    );
+
+    // 4. Cliente clica "Agendar"
+    await highlightBtn('agendar');
+    await addMsg('📅 Agendar Serviço' + time('10:31', true), true);
+
+    // 5. Bot: servicos
+    await sleep(PAUSE);
+    showTyping();
+    await sleep(TYPE_DELAY);
+    hideTyping();
+    await addMsg(
+      'Ótimo, Ana! Qual serviço você gostaria?' +
+      btns([
+        {id:'corte', label:'✂️ Corte Feminino - R$80'},
+        {id:'escova', label:'💆 Escova Progressiva - R$150'},
+        {id:'mani', label:'💅 Manicure - R$45'}
+      ]) + time('10:31')
+    );
+
+    // 6. Cliente escolhe corte
+    await highlightBtn('corte');
+    await addMsg('✂️ Corte Feminino' + time('10:31', true), true);
+
+    // 7. Bot: datas
+    await sleep(PAUSE);
+    showTyping();
+    await sleep(TYPE_DELAY);
+    hideTyping();
+    await addMsg(
+      'Perfeito! Qual dia fica melhor pra você?' +
+      btns([
+        {id:'seg', label:'Seg, 31/03'},
+        {id:'ter', label:'Ter, 01/04'},
+        {id:'qua', label:'Qua, 02/04'}
+      ]) + time('10:31')
+    );
+
+    // 8. Cliente escolhe segunda
+    await highlightBtn('seg');
+    await addMsg('Seg, 31/03' + time('10:32', true), true);
+
+    // 9. Bot: horarios
+    await sleep(PAUSE);
+    showTyping();
+    await sleep(TYPE_DELAY);
+    hideTyping();
+    await addMsg(
+      'Horários disponíveis para <b>Seg, 31/03</b>:' +
+      btns([
+        {id:'h1', label:'09:00'},
+        {id:'h2', label:'10:30'},
+        {id:'h3', label:'14:00'},
+        {id:'h4', label:'16:00'}
+      ]) + time('10:32')
+    );
+
+    // 10. Cliente escolhe 10:30
+    await highlightBtn('h2');
+    await addMsg('10:30' + time('10:32', true), true);
+
+    // 11. Bot: confirmacao
+    await sleep(PAUSE);
+    showTyping();
+    await sleep(TYPE_DELAY);
+    hideTyping();
+    await addMsg(
+      'Sua reserva:<br><br>' +
+      '✂️ <b>Corte Feminino</b><br>' +
+      '📅 <b>Seg, 31/03</b> às <b>10:30</b><br>' +
+      '📍 Studio Bella<br><br>' +
+      'Posso confirmar?' +
+      btns([
+        {id:'ok', label:'✅ Confirmar', primary:false},
+        {id:'voltar', label:'↩️ Voltar'}
+      ]) + time('10:32')
+    );
+
+    // 12. Cliente confirma
+    await highlightBtn('ok');
+    await addMsg('✅ Confirmar' + time('10:33', true), true);
+
+    // 13. Bot: tudo certo
+    await sleep(PAUSE);
+    showTyping();
+    await sleep(TYPE_DELAY);
+    hideTyping();
+    await addMsg(
+      'Prontinho, <b>Ana</b>! Está tudo confirmado! 🎉<br><br>' +
+      '✂️ Corte Feminino<br>' +
+      '📅 Seg, 31/03 às 10:30<br>' +
+      '📍 Studio Bella<br><br>' +
+      'Fique tranquila, vou te lembrar <b>1 dia antes</b> para você não esquecer! 😊' +
+      time('10:33')
+    );
+
+    // Reinicia apos 6s
+    await sleep(6000);
+    runDemo();
+  }
+
+  // Inicia quando o widget fica visivel
+  const chatObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { runDemo(); chatObs.unobserve(e.target); }
+    });
+  }, { threshold: 0.3 });
+  chatObs.observe(chat);
+})();
+
+</script>
+</body>
+</html>
