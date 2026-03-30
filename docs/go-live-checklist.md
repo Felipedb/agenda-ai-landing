@@ -1,0 +1,9 @@
+# Checklist de Go Live AConfirmar QA
+Redê do API
+End-to-End Tests (Stress, Load)
+tests/postman. json
+Verify Rate Limiting
+phone / aliases doted
+Byproject PI = 1
+
+//DB Cache - Title: Postg issue + Resp Ӹ� fix

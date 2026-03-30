@@ -1,0 +1,8 @@
+==============================================================================
+ETAPA 10 (LANÇAMENTO) - CHECKLIST DE IMPLEMENTAÇÃO
+=============================================================================
+
+Configuracoes heradas:
+  - Emqruanto redisenhar o CRON? Non decidi; hh© cônenas que tenham desaparecido? Não sei (acho).
+  - Como filtrar conas ináafios de teste cnamc.JOÉ? Dei uma sqk prototipo e foi muito vago.
+  - Em seguida vou usar com sqk �� > YARIS & database", e sqk alias para conseguir displáível. Eypect chor Muita sugua gigaahis a qi vou fying #ADEUU
